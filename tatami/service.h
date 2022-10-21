@@ -34,7 +34,7 @@ public:
     {
       return compare(reinterpret_cast<const ModelType*>(model));
     });
-    return it != models.end() ? *it : nullptr;
+    return it != models.end() ? reinterpret_cast<ModelType*>(*it) : nullptr;
   }
 
 protected:
