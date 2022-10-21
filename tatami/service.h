@@ -14,33 +14,33 @@ template<typename MODEL>
 class TatamiService : public TatamiServiceInterface
 {
 public:
-  typedef MODEL ModelType;
+  typedef MODEL Model;
 
   explicit TatamiService(QObject* parent = nullptr) : TatamiServiceInterface(parent) {}
 
-  void explicitSort(std::function<bool (const ModelType*, const ModelType*)> compare)
+  void explicitSort(std::function<bool (const Model*, const Model*)> compare)
   {
     PaginatedStore::sort([compare](
-      const TatamiServiceInterface::ModelType* a,
-      const TatamiServiceInterface::ModelType* b)
+      const ModelType* a,
+      const ModelType* b)
     {
-      return compare(reinterpret_cast<const ModelType*>(a), reinterpret_cast<const ModelType*>(b));
+      return compare(reinterpret_cast<const Model*>(a), reinterpret_cast<const Model*>(b));
     });
   }
 
-  ModelType* findIf(std::function<bool (const ModelType*)> compare) const
+  Model* findIf(std::function<bool (const Model*)> compare) const
   {
-    auto it = std::find_if(models.begin(), models.end(), [compare](const TatamiServiceInterface::ModelType* model)
+    auto it = std::find_if(models.begin(), models.end(), [compare](const ModelType* model)
     {
-      return compare(reinterpret_cast<const ModelType*>(model));
+      return compare(reinterpret_cast<const Model*>(model));
     });
-    return it != models.end() ? reinterpret_cast<ModelType*>(*it) : nullptr;
+    return it != models.end() ? reinterpret_cast<Model*>(*it) : nullptr;
   }
 
 protected:
   ModelType* createModel(const QVariantMap& attributes = QVariantMap())
   {
-    return MetaRecordable::factory<ModelType>(attributes, this);
+    return MetaRecordable::factory<MODEL>(attributes, this);
   }
 };
 
