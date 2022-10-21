@@ -29,10 +29,8 @@ void HttpService::withPath(const QUrl& url, std::function<void()> callback)
 
 QByteArray HttpService::pathFor(const ModelType& model) const
 {
-	/*
   if (model.isPersistent())
-    return path + '/' + model.getUuid();
-    */
+    return path + '/' + model.getUid();
   return path;
 }
 
@@ -112,19 +110,15 @@ void HttpService::receivedFetchReply(HttpClient::ResponseObject* reply, Callback
 
 void HttpService::save(ModelType* model, std::function<void()> callback)
 {
-	/*
   if (model->isPersistent())
     update(model, callback);
   else
     create(model, callback);
-    */
 }
 
 void HttpService::parseCreateResponse(ModelType* model, HttpClient::ResponseObject* reply)
 {
-	/*
-  model->setUuid(reply->readAll());
-  */
+  model->setUid(reply->readAll());
 }
 
 void HttpService::create(ModelType* model, std::function<void()> callback)
@@ -142,7 +136,7 @@ void HttpService::create(ModelType* model, std::function<void()> callback)
       case 200:
         model->setParent(this);
         parseCreateResponse(model, reply);
-        models.insert(model->getUuid(), model);
+        models.insert(model->getUid(), model);
         emit modelAdded(model);
         if (callback) callback();
         break ;
@@ -170,15 +164,13 @@ void HttpService::update(ModelType* model, std::function<void()> callback)
     switch (status)
     {
       case 200:
-        ownedModel = get(model->getUuid());
-	/*
+        ownedModel = get(model->getUid());
         if (ownedModel)
           ownedModel->copy(model);
         else
-	*/
         {
           model->setParent(this);
-          models.insert(model->getUuid(), model);
+          models.insert(model->getUid(), model);
         }
         emit modelSaved(model);
         if (callback) callback();
@@ -206,11 +198,9 @@ void HttpService::destroy(ModelType* model, std::function<void ()> callback)
     switch (status)
     {
       case 200:
-        models.remove(model->getUuid());
+        models.remove(model->getUid());
         emit modelRemoved(model);
-	/*
-        model->setUuid(QByteArray());
-	*/
+        model->setUid(QByteArray());
         emit model->attributeChanged();
         if (callback)
           callback();

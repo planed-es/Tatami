@@ -26,7 +26,7 @@ void ModelStore::insert(ModelType* model)
 
 void ModelStore::remove(ModelType* model)
 {
-  auto it = models.find(model->getUuid());
+  auto it = models.find(model->getUid());
 
   if (it != models.end())
   {
@@ -39,10 +39,10 @@ void ModelStore::remove(ModelType* model)
 
 void ModelStore::replaceModel(ModelType* model)
 {
-  auto it = models.find(model->getUuid());
+  auto it = models.find(model->getUid());
   if (it != models.end())
     cleanUpModel(it.value());
-  models.insert(model->getUuid(), model);
+  models.insert(model->getUid(), model);
   connect(model, &QObject::destroyed, this, &ModelStore::purgeModel);
 }
 

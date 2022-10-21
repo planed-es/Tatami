@@ -67,7 +67,7 @@ void SubsetService::reloadModelsFromSource()
     const auto list = source->filter(selector);
 
     for (auto* model : list)
-      models.insert(model->getUuid(), model);
+      models.insert(model->getUid(), model);
   }
 }
 
@@ -75,14 +75,14 @@ void SubsetService::onModelAdded(ModelType* model)
 {
   if (selector(model))
   {
-    models.insert(model->getUuid(), model);
+    models.insert(model->getUid(), model);
     emit modelAdded(model);
   }
 }
 
 void SubsetService::onModelRemoved(ModelType* model)
 {
-  auto it = models.find(model->getUuid());
+  auto it = models.find(model->getUid());
 
   if (it != models.end())
   {
@@ -95,13 +95,13 @@ void SubsetService::onModelSaved(ModelType* model)
 {
   if (selector(model))
   {
-    auto it = models.find(model->getUuid());
+    auto it = models.find(model->getUid());
 
     if (it != models.end())
       emit modelSaved(model);
     else
     {
-      models.insert(model->getUuid(), model);
+      models.insert(model->getUid(), model);
       emit modelAdded(model);
     }
   }

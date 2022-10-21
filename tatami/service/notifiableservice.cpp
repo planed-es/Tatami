@@ -65,13 +65,13 @@ void NotifiableService::receivedNotification(const QString& message)
 
     if (operation == "update" && model)
     {
-      qDebug() << this << "-> notification updated model" << model->getUuid();
+      qDebug() << this << "-> notification updated model" << model->getUid();
       model->fromNotification(modelData);
       emit modelSaved(model);
     }
     else if (operation == "delete" && model)
     {
-      qDebug() << this << "-> notification deleted model" << model->getUuid();
+      qDebug() << this << "-> notification deleted model" << model->getUid();
       models.remove(uid);
       emit modelRemoved(model);
       cleanUpModel(model);

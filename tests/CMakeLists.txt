@@ -1,5 +1,6 @@
 set(TatamiLinkLibraries
   Qt${QT_VERSION_MAJOR}::Core
+  Qt${QT_VERSION_MAJOR}::Gui
   Qt${QT_VERSION_MAJOR}::Qml
 )
 

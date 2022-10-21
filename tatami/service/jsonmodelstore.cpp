@@ -24,5 +24,5 @@ void JsonModelStore::loadFromJson(const QJsonObject& object)
   ModelType* model = createModel(object.toVariantMap());
 
   decorateParsedModel(model);
-  models.insert(model->getUuid(), model);
+  models.insert(model->getUid(), model);
 }

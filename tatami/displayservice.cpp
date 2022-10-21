@@ -63,7 +63,7 @@ void DisplayService::resetState()
       models.remove("");
       emit modelRemoved(sample);
     }
-    if (get(sample->getUuid()) != sample)
+    if (get(sample->getUid()) != sample)
       sample->deleteLater();
     sample = nullptr;
   }
