@@ -24,6 +24,7 @@ public:
 
   HttpClient(QObject* parent = nullptr);
 
+  static void setDefaultServerUrl(const QByteArray& value);
   void setServerUrl(const QUrl& value) { serverUrl = value; }
   inline bool isBusy() const { return runningRequests > 0; }
 

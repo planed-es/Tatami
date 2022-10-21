@@ -10,10 +10,16 @@
 
 const QByteArray HttpClient::userAgent("Tatami/1.0");
 const QUuid applicationUid = QUuid::createUuid();
+static QByteArray defaultServerUrl;
 
 HttpClient::HttpClient(QObject* parent) : QNetworkAccessManager(parent)
 {
-  serverUrl = QProcessEnvironment::systemEnvironment().value("TATAMI_SERVER_URL");
+  serverUrl = QProcessEnvironment::systemEnvironment().value("TATAMI_SERVER_URL", defaultServerUrl);
+}
+
+void HttpClient::setDefaultServerUrl(const QByteArray& value)
+{
+  defaultServerUrl = value;
 }
 
 void HttpClient::decorateRequest(QNetworkRequest& request) const
