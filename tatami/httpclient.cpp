@@ -42,10 +42,12 @@ void HttpClient::decorateJsonRequest(QNetworkRequest& request, int length) const
 QUrl HttpClient::getUrl(const QByteArray& path, QByteArray scheme) const
 {
   QUrl url(serverUrl);
+  QStringList parts = QString(path).split('?');
 
-  if (!scheme.length())
+  if (scheme.length())
     url.setScheme(scheme);
-  url.setPath(path);
+  url.setPath(parts.takeFirst());
+  url.setQuery(parts.join('?'));
   return url;
 }
 
