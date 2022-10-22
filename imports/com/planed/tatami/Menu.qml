@@ -1,9 +1,8 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
-import '..'
 
-ApplicationView {
+View {
   property var actions: []
   id: root
   enabled: true

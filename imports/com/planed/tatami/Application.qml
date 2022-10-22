@@ -1,12 +1,13 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12 as QQControls
-import Qt.labs.settings 1.1
+import "." as Tatami
 
-Window {
+Tatami.Window {
   id: application
 
   property alias backEnabled: toolBar.backEnabled
   property alias stackView: mainView
+  property alias toolBar: toolBar
   property var modal: null
   property int transitionDuration: 250
   property real viewOffset: {
@@ -22,7 +23,7 @@ Window {
   property var views: []
   property var contextActions: []
   property var currentView
-  property alias initialView: mainView.initialView
+  property string initialView
 
   function goToPage(pageName) {
     console.log("Page", pageName);
@@ -34,7 +35,7 @@ Window {
   function goToView(viewName, properties = {}) {
     properties.previousView = mainView.currentItem;
     mainView.currentItem.state = "stacked";
-    mainView.push(`${viewName}.qml`, properties);
+    mainView.push(`qrc:/${viewName}.qml`, properties);
     mainView.currentItem.state = "deployed";
     views.push(mainView.currentItem);
   }
@@ -44,7 +45,7 @@ Window {
     mainView.currentItem.state = "popped";
     goToViewTimer.callback = function() {
       mainView.pop();
-      mainView.push(`${viewName}.qml`, properties);
+      mainView.push(`qrc:/${viewName}.qml`, properties);
       mainView.currentItem.state = "deployed";
       views.pop();
       views.push(mainView.currentItem);
@@ -110,6 +111,7 @@ Window {
     property int altDepth: 0
     anchors { left: parent.left; top: breadcrumbsRow.bottom; right: parent.right; bottom: parent.bottom }
     state: "root"
+    initialItem: `qrc:/${application.initialView}`
     onCurrentItemChanged: {
       for (var i = Math.max(0, mainView.depth - 2) ; i < mainView.depth ; ++i)
         mainView.get(i).visible = true;
@@ -136,7 +138,6 @@ Window {
     popExit:   emptyTransition
     pushExit:  emptyTransition
     popEnter:  emptyTransition
-
   } // END StackView
 
   Rectangle {

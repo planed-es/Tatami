@@ -1,6 +1,7 @@
 import QtQuick 2.12
 
 Item {
+  id: self
   property var actions: []
   property var view
   property bool backEnabled: true
@@ -28,7 +29,7 @@ Item {
   function prepareActions() {
     if (generateActions !== null)
       actions = generateActions();
-    this.attachActions();
+    self.attachActions();
   }
 
   function attachActions() {

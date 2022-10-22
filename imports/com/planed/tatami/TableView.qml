@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import "./TableHelpers.js" as Helpers
+import "." as Tatami
 
 TableView {
   id: root
@@ -69,11 +70,11 @@ TableView {
     defaultComponent: defaultCell
   }
 
-  TableStyle {
+  Tatami.TableStyle {
     id: applicationTableStyle
   }
 
-  TableStyle {
+  Tatami.TableStyle {
     id: inactiveTableStyle
     selectionColor: headerBackgroundColor
     backgroundColor: "#a1a1a1"
@@ -94,12 +95,12 @@ TableView {
     }
   }
 
-  TableHorizontalHeader {
+  Tatami.TableHorizontalHeader {
     id: columnsHeader
     table: root
   }
 
-  TableVerticalHeader {
+  Tatami.TableVerticalHeader {
     id: rowsHeader
     table: root
   }

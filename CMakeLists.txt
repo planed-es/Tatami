@@ -24,6 +24,7 @@ set(qml_files
   imports/com/planed/tatami/Window.qml
   imports/com/planed/tatami/Application.qml
   imports/com/planed/tatami/ActionSet.qml
+  imports/com/planed/tatami/Menu.qml
   imports/com/planed/tatami/IndexActions.qml
   imports/com/planed/tatami/EditActions.qml
   imports/com/planed/tatami/MultiplePickerActions.qml
@@ -51,6 +52,7 @@ set(qml_files
   imports/com/planed/tatami/TableCell.qml
   imports/com/planed/tatami/TableNavigation.qml
   imports/com/planed/tatami/TableStyle.qml
+  imports/com/planed/tatami/TableFields.qml
   imports/com/planed/tatami/TableVerticalHeader.qml
   imports/com/planed/tatami/TableHorizontalHeader.qml
   imports/com/planed/tatami/TableHelpers.js

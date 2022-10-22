@@ -1,7 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12 as QQControls
 
-Dialog {
+QQControls.Dialog {
   property var actions: dialogActions
   property var parentView
   property var fallbackActionSet

@@ -8,6 +8,12 @@ Item {
   property int currentField: -1
   property int focusBackup: -1
   property var fieldAfter: null
+  property var customFields: ({})
+
+  property alias textEditCell: textEditCell
+  property alias numberEditCell: numberEditCell
+  property alias boolEditCell: boolEditCell
+  property alias dateEditCell: dateEditCell
 
   function reset() {
     fields = [];
@@ -57,6 +63,8 @@ Item {
   }
 
   function defaultFieldFor(propertyName) {
+    if (customFields[propertyName])
+      return customFields[propertyName];
     switch (typeof root.model[propertyName]) {
     case "boolean":
       return boolEditCell;

@@ -1,9 +1,10 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12 as QQControls
 import "./TableHelpers.js" as Helpers
-import Tatami 1.0
+import "." as Tatami
+import com.planed.tatami.helpers
 
-TableView {
+Tatami.TableView {
   id: root
   property QtObject sample
   property var inputs: []
