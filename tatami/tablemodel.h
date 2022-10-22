@@ -6,6 +6,7 @@
 
 class TATAMI_EXPORT TatamiTableModel : public MetaRecordTableModel
 {
+  Q_OBJECT
 public:
   explicit TatamiTableModel(QObject* parent = nullptr);
 
