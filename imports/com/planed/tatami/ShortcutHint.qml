@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
+import com.planed.tatami 1.0 as Tatami
 
 Label {
   visible: text.length > 0
@@ -13,6 +14,6 @@ Label {
     anchors.leftMargin: 5
     width: 20
     height: 20
-    source: "qrc:/icons/icon-theme/48x48/accessories-character-map.png"
+    source: Tatami.Icons.url("accessories-character-map", 48)
   }
 }

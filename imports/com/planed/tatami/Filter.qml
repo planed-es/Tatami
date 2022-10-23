@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import com.planed.tatami 1.0 as Tatami
 
 Item {
   id: root
@@ -42,7 +43,7 @@ Item {
 
     Image {
       Layout.alignment: Qt.AlignRight
-      source: "qrc:/icons/icon-theme/48x48/edit-find.png"
+      source: Tatami.Icons.url("edit-find", 48)
     }
 
     Repeater {

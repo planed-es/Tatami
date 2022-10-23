@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import com.planed.tatami 1.0 as Tatami
 
 View {
   property var actions: []
@@ -36,7 +37,7 @@ View {
         onClicked: entryAction.trigger()
       }
       Image {
-        source: `qrc:/icons/icon-theme/48x48/${action.icon.name}.png`
+        source: Tatami.Icons.url(action.icon.name, 48)
         width: 48
         height: width
         anchors.centerIn: parent

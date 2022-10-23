@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12 as QQControls
+import com.planed.tatami 1.0
 
 QQControls.Pane {
   id: root
@@ -46,7 +47,7 @@ QQControls.Pane {
       anchors { bottom: parent.bottom; right: parent.right; margins: 10 }
       width: 256
       height: 256
-      source: `qrc:/icons/icon-theme/256x256/${viewPicto}.png`
+      source: Icons.url(viewPicto, 256)
       opacity: 0.5
     }
   }

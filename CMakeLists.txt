@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 cmake_policy(SET CMP0071 NEW)
 
-include_directories(/tmp/usr/include)
+include_directories(/tmp/usr/include tatami)
 link_directories(/tmp/usr/lib)
 
 file(GLOB_RECURSE cpp_headers tatami/*.h)

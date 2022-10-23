@@ -1,8 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12 as QQControls
 import "./TableHelpers.js" as Helpers
-import "." as Tatami
-import com.planed.tatami.helpers
+import com.planed.tatami 1.0 as Tatami
 
 Tatami.TableView {
   id: root
@@ -15,8 +14,8 @@ Tatami.TableView {
   property bool activationEnabled: true
 
   cellComponentProvider: fields.componentProvider
-  navigationEnabled: model.state === TableModel.ReadState
-  actionComponent:   model.state === TableModel.ReadState ? null : editActions
+  navigationEnabled: model.state === Tatami.TableModel.ReadState
+  actionComponent:   model.state === Tatami.TableModel.ReadState ? null : editActions
 
   signal accepted()
   signal canceled()
@@ -29,11 +28,11 @@ Tatami.TableView {
       fields.model = root.sample;
       fields.reset();
       reloadRow(model.currentIndex);
-      if (model.state !== TableModel.ReadState)
+      if (model.state !== Tatami.TableModel.ReadState)
         delayedFieldFocus.running = true;
     }
     function onCurrentIndexChanged() {
-      if (model.state !== TableModel.ReadState)
+      if (model.state !== Tatami.TableModel.ReadState)
         delayedFocusRetriever.running = true;
     }
   }
