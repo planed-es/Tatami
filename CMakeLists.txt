@@ -14,8 +14,8 @@ link_directories(/tmp/usr/lib)
 
 file(GLOB_RECURSE cpp_headers tatami/*.h)
 file(GLOB_RECURSE cpp_sources tatami/*.cpp)
-file(GLOB_RECURSE tst_headers tatami/tests/*.h)
-file(GLOB_RECURSE tst_sources tatami/tests/*.cpp)
+file(GLOB tst_headers tatami/tests/*.h)
+file(GLOB tst_sources tatami/tests/*.cpp)
 list(FILTER cpp_headers EXCLUDE REGEX "tatami/tests/.*")
 list(FILTER cpp_sources EXCLUDE REGEX "tatami/tests/.*")
 

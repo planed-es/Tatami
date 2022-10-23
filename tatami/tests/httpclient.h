@@ -1,11 +1,10 @@
 #ifndef TEST_HTTPCLIENT_H
 # define TEST_HTTPCLIENT_H
 
-# ifdef TATAMI_TESTLIB
-#  include <QObject>
-#  include <QVariant>
-#  include <QJsonDocument>
-#  include "../Tatami_global.h"
+# include <QObject>
+# include <QVariant>
+# include <QJsonDocument>
+# include "../Tatami_global.h"
 
 class QWebSocket;
 
@@ -18,15 +17,7 @@ public:
     HttpStatusCodeAttribute = 0
   };
 
-  StubResponse(QObject* parent = nullptr) : QObject(parent)
-  {
-    connect(this, &StubResponse::stub, this, [this](QByteArray method_, QByteArray value, QJsonDocument body)
-    {
-      method = method_;
-      path = value;
-      document = body;
-    });
-  }
+  StubResponse(QObject* parent = nullptr);
 
   QVariant attribute(Attribute) { return status; }
   QByteArray readAll() const { return body; }
@@ -50,19 +41,20 @@ public:
 
   HttpClient(QObject* parent = nullptr) : QObject(parent) {}
 
-  void setServerUrl(const QUrl&) {}
+  void setServerUrl(const QUrl& value) { serverUrl = value; }
+  QUrl getServerUrl() const { return serverUrl; }
   inline bool isBusy() const { return false; }
 
-  StubResponse* get(const QByteArray& path) { emit response.stub("GET", path, QJsonDocument()); return &response; }
-  StubResponse* get(const QByteArray& path, const QJsonDocument& document) { emit response.stub("GET", path, document); return &response; }
-  StubResponse* put(const QByteArray& path, const QJsonDocument& document) { emit response.stub("PUT", path, document); return &response; }
-  StubResponse* post(const QByteArray& path, const QJsonDocument& document) { emit response.stub("POST", path, document); return &response; }
-  StubResponse* destroy(const QByteArray path) { emit response.stub("DELETE", path, QJsonDocument()); return &response; }
+  StubResponse* get(const QByteArray& path);
+  StubResponse* get(const QByteArray& path, const QJsonDocument& document);
+  StubResponse* put(const QByteArray& path, const QJsonDocument& document);
+  StubResponse* post(const QByteArray& path, const QJsonDocument& document);
+  StubResponse* destroy(const QByteArray path);
   void          listen(const QByteArray& path, QWebSocket&) {}
 
 private:
+  QUrl serverUrl;
   static StubResponse response;
 };
 
-# endif
 #endif
