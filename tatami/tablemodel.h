@@ -2,11 +2,13 @@
 # define TATAMITABLEMODEL_H
 
 # include <metarecord/tablemodel.h>
+# include <QtQml/qqml.h>
 # include "Tatami_global.h"
 
 class TATAMI_EXPORT TatamiTableModel : public MetaRecordTableModel
 {
   Q_OBJECT
+  QML_NAMED_ELEMENT(TableModel)
 public:
   explicit TatamiTableModel(QObject* parent = nullptr);
 
