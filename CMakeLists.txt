@@ -58,12 +58,18 @@ set(qml_files
   imports/com/planed/tatami/TableHelpers.js
 )
 
+set(resource_files
+  fonts/ShareTechMono-Regular.ttf
+  fonts/signika.ttf
+)
+
 qt_add_qml_module(Tatami
   OUTPUT_DIRECTORY imports/com/planed/tatami
   URI com.planed.tatami
   VERSION 1.0
   QML_FILES ${qml_files}
   SOURCES tatami_plugin.cpp tatami_plugin.h ${cpp_sources}
+  RESOURCES ${resource_files}
 )
 
 target_compile_definitions(Tatami PRIVATE TATAMI_LIBRARY)

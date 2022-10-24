@@ -3,6 +3,15 @@
 #include "tatami/controller.h"
 #include "tatami/edit_controller.h"
 #include <qqml.h>
+#include <QtGui/QFontDatabase>
+
+const QString TatamiPlugin::defaultFont = "Signika";
+
+void TatamiPlugin::registerFonts()
+{
+  QFontDatabase::addApplicationFont(":/com/planed/tatami/fonts/ShareTechMono-Regular.ttf");
+  QFontDatabase::addApplicationFont(":/com/planed/tatami/fonts/signika.ttf");
+}
 
 void TatamiPlugin::registerTypes(const char *uri)
 {
