@@ -6,6 +6,7 @@
 #include <QtGui/QFontDatabase>
 
 const QString TatamiPlugin::defaultFont = "Signika";
+QJSEngine* TatamiPlugin::qmlEngine = nullptr;
 
 void TatamiPlugin::registerFonts()
 {

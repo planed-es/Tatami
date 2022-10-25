@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 
 project(Tatami)
 
+option(BUILD_TESTS "builds tests" ON)
+
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml QuickControls2 Network WebSockets)
 
 set(CMAKE_AUTOMOC ON)
@@ -9,7 +11,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 cmake_policy(SET CMP0071 NEW)
 
-add_link_options(-Wl,--unresolved-symbols=ignore-all)
 include_directories(tatami)
 
 file(GLOB qml_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
@@ -25,6 +26,13 @@ file(GLOB tst_sources tatami/tests/*.cpp)
 list(FILTER cpp_headers EXCLUDE REGEX "tatami/tests/.*")
 list(FILTER cpp_sources EXCLUDE REGEX "tatami/tests/.*")
 
+link_libraries(
+  Qt${QT_MAJOR_VERSION}::Gui
+  Qt${QT_MAJOR_VERSION}::WebSockets
+  MetaRecordQt
+  QI18n
+)
+
 qt_add_qml_module(Tatami
   OUTPUT_DIRECTORY imports/com/planed/tatami
   URI com.planed.tatami
@@ -36,7 +44,9 @@ qt_add_qml_module(Tatami
 
 target_compile_definitions(Tatami PRIVATE TATAMI_LIBRARY)
 
-add_subdirectory(tests)
+if (BUILD_TESTS)
+  add_subdirectory(tests)
+endif()
 
 install(FILES tatami_plugin.h DESTINATION include)
 install(FILES ${cpp_headers} DESTINATION include/tatami)

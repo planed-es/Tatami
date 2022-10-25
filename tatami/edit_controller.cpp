@@ -1,5 +1,6 @@
 #include <QDebug>
 #include "edit_controller.h"
+#include "jsvaluetofunction.h"
 
 std::function<void()> jsValueToCallback(QJSValue callback)
 {

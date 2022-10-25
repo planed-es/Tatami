@@ -5,7 +5,7 @@
 
 TatamiTableModel::TatamiTableModel(QObject* parent) : MetaRecordTableModel(parent)
 {
-  javascriptEngine = TatamiPlugin::qmlEngine();
+  javascriptEngine = TatamiPlugin::qmlEngine;
 }
 
 int TatamiTableModel::maxWidthForProperty(const QByteArray& propertyName, const QString& fontName, int fontSize) const
