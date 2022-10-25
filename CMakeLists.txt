@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 cmake_policy(SET CMP0071 NEW)
 
+add_link_options(-Wl,--unresolved-symbols=ignore-all)
 include_directories(tatami)
 
 file(GLOB qml_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
