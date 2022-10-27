@@ -20,7 +20,7 @@ file(GLOB qml_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 )
 file(GLOB resource_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} fonts/*.ttf)
 file(GLOB_RECURSE cpp_headers tatami/*.h)
-file(GLOB_RECURSE cpp_sources tatami/*.cpp)
+file(GLOB_RECURSE cpp_sources tatami/*.cpp tatami_plugin.cpp)
 file(GLOB tst_headers tatami/tests/*.h)
 file(GLOB tst_sources tatami/tests/*.cpp)
 list(FILTER cpp_headers EXCLUDE REGEX "tatami/tests/.*")
@@ -38,7 +38,7 @@ qt_add_qml_module(Tatami
   URI com.planed.tatami
   VERSION 1.0
   QML_FILES ${qml_files}
-  SOURCES tatami_plugin.cpp tatami_plugin.h ${cpp_sources}
+  SOURCES tatami_plugin.h ${cpp_sources}
   RESOURCES ${resource_files}
 )
 
