@@ -30,6 +30,7 @@ public:
   void save(ModelType* model) { save(model, [](){}); }
   virtual void save(ModelType*, std::function<void()> callback);
   virtual void destroy(ModelType*, std::function<void()> callback = std::function<void()>());
+  virtual void destroyAll(std::function<void()> callback = std::function<void()>());
 
 signals:
   void pathChanged();

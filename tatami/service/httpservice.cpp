@@ -212,6 +212,29 @@ void HttpService::destroy(ModelType* model, std::function<void ()> callback)
   });
 }
 
+void HttpService::destroyAll(std::function<void ()> callback)
+{
+  QSharedPointer<short> count(new short);
+  const auto list = values();
+
+  *count = 0;
+  for (ModelType* model : list)
+  {
+    if (model->isPersistent())
+    {
+      *count += 1;
+      destroy(model, [count, callback]()
+      {
+        *count -= 1;
+        if (*count == 0 && callback)
+          callback();
+      });
+    }
+  }
+  if (*count == 0)
+    callback();
+}
+
 void HttpService::receivedCreateErrorReply(HttpClient::ResponseObject* reply)
 {
   QJsonObject response = QJsonDocument::fromJson(reply->readAll()).object();
