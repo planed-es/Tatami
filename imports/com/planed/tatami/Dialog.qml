@@ -46,16 +46,12 @@ QQControls.Dialog {
       view: parentView
       backEnabled: false
 
-      QQControls.Action {
+      Action {
         id: confirmAction
         text: i18n.t("Ok") + " (F5)"
         icon.name: "dialog-ok"
-        onTriggered: root.accept()
-      }
-
-      Shortcut {
         sequence: "F5"
-        onActivated: confirmAction.trigger()
+        onTriggered: root.accept()
       }
     }
   }

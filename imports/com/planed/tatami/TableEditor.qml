@@ -1,5 +1,4 @@
 import QtQuick 2.12
-import QtQuick.Controls 2.12 as QQControls
 import "./TableHelpers.js" as Helpers
 import com.planed.tatami 1.0 as Tatami
 
@@ -70,14 +69,10 @@ Tatami.TableView {
       view: root.parentView
       backEnabled: false
 
-      QQControls.Action {
+      Action {
         id: validateAction
         text: i18n.t("actions")
-        shortcut: Shortcut {
-          sequences: ["Enter", "Return"]
-          enabled: validateAction.enabled
-          onActivated: validateAction.trigger()
-        }
+        sequences: ["Enter", "Return"]
         onTriggered: {
           if (fields.lastField().activeFocus) {
             if (withConfirmDialog)
@@ -92,25 +87,19 @@ Tatami.TableView {
         }
       }
 
-      QQControls.Action {
+      Action {
         id: saveAction
         text: i18n.t("actions.save")
         icon.name: "media-floppy"
-        shortcut: Shortcut {
-          sequence: "F5"
-          onActivated: saveAction.trigger()
-        }
+        sequence: "F5"
         onTriggered: root.accepted()
       }
 
-      QQControls.Action {
+      Action {
         id: cancelAction
         text: i18n.t("Cancel")
         icon.name: "dialog-ko"
-        shortcut: Shortcut {
-          sequence: "F4"
-          onActivated: cancelAction.trigger()
-        }
+        sequence: "F4"
         onTriggered: root.canceled()
       }
     }

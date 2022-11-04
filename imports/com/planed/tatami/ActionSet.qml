@@ -19,16 +19,10 @@ Item {
       application.backEnabled = true;
   }
 
-  onEnabledChanged: {
-    actions.forEach(action => {
-      action.enabled = enabled;
-      action.shortcut.enabled = enabled;
-    });
-  }
-
   function prepareActions() {
     if (generateActions !== null)
       actions = generateActions();
+    actions.forEach(action => { action.actionSet = self; });
     self.attachActions();
   }
 

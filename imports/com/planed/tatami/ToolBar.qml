@@ -10,11 +10,12 @@ QQControls.ToolBar {
   height: 60
   clip: true
 
-  QQControls.Action {
+  Action {
     id: exitAction
     text: i18n.t("actions.back")
     icon.name: "go-previous"
     enabled: backEnabled && viewDepth > 1
+    sequence: "F4"
     onTriggered: application.closeCurrentView()
   }
 
@@ -53,22 +54,6 @@ QQControls.ToolBar {
           var date = new Date();
           parent.text = date.toLocaleString()
         }
-      }
-    }
-  }
-
-  Loader {
-    sourceComponent: exitAction.enabled ? backComponent : null
-  }
-
-  Component {
-    id: backComponent
-    Item {
-      Shortcut {
-        sequence: "F4"
-        onActivated: exitAction.triggered()
-        Component.onCompleted: exitAction.shortcut = this;
-        Component.onDestruction: exitAction.shortcut = null;
       }
     }
   }

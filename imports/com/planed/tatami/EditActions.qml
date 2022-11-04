@@ -1,5 +1,4 @@
 import QtQuick 2.12
-import QtQuick.Controls 2.12
 
 ActionSet {
   actions: [validateAction, cancelAction]
@@ -12,10 +11,7 @@ ActionSet {
     id: validateAction
     text: i18n.t("actions.save")
     icon.name: "media-floppy"
-    shortcut: Shortcut {
-      sequence: "F5"
-      onActivated: validateAction.trigger()
-    }
+    sequence: "F5"
     onTriggered: persist()
   }
 
@@ -23,10 +19,7 @@ ActionSet {
     id: cancelAction
     text: i18n.t("Cancel")
     icon.name: "dialog-ko"
-    shortcut: Shortcut {
-      sequence: "F4"
-      onActivated: cancelAction.trigger()
-    }
+    sequence: "F4"
     onTriggered: cancel();
   }
 }

@@ -3,12 +3,20 @@ import QtQuick.Controls 2.12 as QQControls
 
 QQControls.Action {
   property string sequence
+  property var sequences
+  property QtObject actionSet
   id: action
   shortcut: Shortcut {
-    id: shortcut
-    context: Qt.ApplicationShortcut
-    sequence: action.sequence
-    enabled: action.enabled
-    onActivated: action.trigger()
+    context: Qt.WindowShortcut
+    enabled: action.enabled && (!actionSet || actionSet.enabled)
+    sequence: enabled ? action.sequence : ""
+    sequences: enabled ? action.sequences : []
+    onActivated: {
+      action.trigger();
+    }
+    onActivatedAmbiguously: {
+      if (actionSet && actionSet.enabled)
+        action.trigger();
+    }
   }
 }

@@ -1,5 +1,4 @@
 import QtQuick 2.12
-import QtQuick.Controls 2.12
 
 ActionSet {
   property bool withAdd: true
@@ -65,12 +64,7 @@ ActionSet {
     text: labelForAction("actions.addResource")
     icon.name: "list-add"
     enabled: withAdd
-    shortcut: Shortcut {
-      context: Qt.ApplicationShortcut
-      sequence: "F5"
-      enabled: addAction.enabled
-      onActivated: addAction.trigger()
-    }
+    sequence: "F5"
     onTriggered: add()
   }
 
@@ -79,12 +73,7 @@ ActionSet {
     text: i18n.t("actions.filter")
     icon.name: "edit-find"
     enabled: withFilters
-    shortcut: Shortcut {
-      context: Qt.ApplicationShortcut
-      sequence: "F2"
-      enabled: withFilters
-      onActivated: filterAction.trigger()
-    }
+    sequence: "F2"
     onTriggered: focusFilters()
   }
 
@@ -93,12 +82,7 @@ ActionSet {
     text: i18n.t("actions.clear-filters")
     enabled: withFilters
     icon.name: "edit-find"
-    shortcut: Shortcut {
-      context: Qt.ApplicationShortcut
-      sequence: "F3"
-      enabled: withFilters
-      onActivated: clearFilterAction.trigger()
-    }
+    sequence: "F3"
     onTriggered: clearFilters()
   }
 
@@ -107,11 +91,7 @@ ActionSet {
     text: labelForAction("actions.removeResource")
     icon.name: "list-remove"
     enabled: withRemove
-    shortcut: Shortcut {
-      sequence: "F6"
-      enabled: withRemove
-      onActivated: removeAction.trigger()
-    }
+    sequence: "F6"
     onTriggered: remove()
   }
 
@@ -120,11 +100,7 @@ ActionSet {
     text: i18n.t("actions.print")
     icon.name: "printer"
     enabled: withPrint
-    shortcut: Shortcut {
-      sequence: "F9"
-      enabled: withPrint
-      onActivated: printAction.trigger()
-    }
+    sequence: "F9"
     onTriggered: printRequested()
   }
 
@@ -133,11 +109,7 @@ ActionSet {
     text: i18n.t("actions.previousPage")
     icon.name: "arrow-left"
     enabled: withPagination && page > 0
-    shortcut: Shortcut {
-      sequence: "Alt+Left"
-      enabled: previousPageAction.enabled
-      onActivated: previousPageAction.trigger()
-    }
+    sequence: "Alt+Left"
     onTriggered: previousPage()
   }
 
@@ -146,11 +118,7 @@ ActionSet {
     text: i18n.t("actions.nextPage")
     icon.name: "arrow-right"
     enabled: withPagination && (page < maxPage || maxPage === -1)
-    shortcut: Shortcut {
-      sequence: "Alt+Right"
-      enabled: nextPageAction.enabled
-      onActivated: nextPageAction.trigger()
-    }
+    sequence: "Alt+Right"
     onTriggered: nextPage()
   }
 }

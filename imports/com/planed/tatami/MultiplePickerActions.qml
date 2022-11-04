@@ -1,5 +1,4 @@
 import QtQuick 2.12
-import QtQuick.Controls 2.12
 
 ActionSet {
   property QtObject model:        view.model
@@ -12,40 +11,16 @@ ActionSet {
     id: confirmAction
     text: i18n.t("actions.confirm")
     icon.name: "dialog-ok"
-    shortcut: Shortcut {
-      sequence: "F5"
-      onActivated: confirmAction.trigger()
-    }
+    sequence: "F5"
     onTriggered: {
       model[propertyName] = value;
       application.closeCurrentView();
     }
   }
 
-  Shortcut {
-    id: switchShortcut
-    sequence: "F1"
-    onActivated: {
-      if (switchToOptionsAction.enabled)
-        switchToOptionsAction.trigger();
-      else
-        switchToSelectionAction.trigger();
-    }
-  }
-
-  Shortcut {
-    id: actionShortcut
-    sequence: "F2"
-    onActivated: {
-      if (removeAction.enabled)
-        removeAction.trigger();
-      else
-        addAction.trigger();
-    }
-  }
-
   Action {
     id: switchToOptionsAction
+    sequence: "F1"
     icon.name: "list-add"
     text: i18n.t("actions.pick")
     enabled: !optionPicker.hasFocus
@@ -55,6 +30,7 @@ ActionSet {
 
   Action {
     id: switchToSelectionAction
+    sequence: "F1"
     icon.name: "view"
     text: i18n.t("actions.selection")
     enabled: optionPicker.hasFocus
@@ -64,6 +40,7 @@ ActionSet {
 
   Action {
     id: addAction
+    sequence: "F2"
     icon.name: "list-add"
     text: i18n.t("actions.add")
     enabled: optionPicker.hasFocus
@@ -73,6 +50,7 @@ ActionSet {
 
   Action {
     id: removeAction
+    sequence: "F2"
     icon.name: "list-remove"
     text: i18n.t("actions.remove")
     enabled: !optionPicker.hasFocus

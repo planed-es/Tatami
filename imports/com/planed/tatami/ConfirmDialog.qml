@@ -14,28 +14,20 @@ Dialog {
       view: parentView
       backEnabled: false
 
-      QQControls.Action {
+      Action {
         id: confirmAction
-        text: i18n.t("Ok") + " (F5)"
+        text: i18n.t("Ok")
         icon.name: "dialog-ok"
+        sequence: "F5"
         onTriggered: confirmDialog.accept()
       }
 
-      QQControls.Action {
+      Action {
         id: cancelAction
-        text: i18n.t("Cancel") + " (F4)"
+        text: i18n.t("Cancel")
         icon.name: "dialog-ko"
-        onTriggered: confirmDialog.reject()
-      }
-
-      Shortcut {
-        sequence: "F5"
-        onActivated: confirmAction.trigger()
-      }
-
-      Shortcut {
         sequence: "F4"
-        onActivated: cancelAction.trigger()
+        onTriggered: confirmDialog.reject()
       }
     }
   }
