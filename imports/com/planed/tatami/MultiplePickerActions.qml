@@ -24,8 +24,7 @@ ActionSet {
     icon.name: "list-add"
     text: i18n.t("actions.pick")
     enabled: !optionPicker.hasFocus
-    shortcut: switchShortcut
-    onTriggered: root.switchMode()
+    onTriggered: view.switchMode()
   }
 
   Action {
@@ -34,8 +33,7 @@ ActionSet {
     icon.name: "view"
     text: i18n.t("actions.selection")
     enabled: optionPicker.hasFocus
-    shortcut: switchShortcut
-    onTriggered: root.switchMode()
+    onTriggered: view.switchMode()
   }
 
   Action {
@@ -44,8 +42,7 @@ ActionSet {
     icon.name: "list-add"
     text: i18n.t("actions.add")
     enabled: optionPicker.hasFocus
-    shortcut: actionShortcut
-    onTriggered: root.addCurrentOption()
+    onTriggered: view.addCurrentOption()
   }
 
   Action {
@@ -54,7 +51,6 @@ ActionSet {
     icon.name: "list-remove"
     text: i18n.t("actions.remove")
     enabled: !optionPicker.hasFocus
-    shortcut: actionShortcut
-    onTriggered: root.removeCurrentOption()
+    onTriggered: view.removeCurrentOption()
   }
 }

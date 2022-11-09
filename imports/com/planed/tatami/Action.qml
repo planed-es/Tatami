@@ -3,7 +3,7 @@ import QtQuick.Controls 2.12 as QQControls
 
 QQControls.Action {
   property string sequence
-  property var sequences
+  property var sequences: []
   property QtObject actionSet
   id: action
   shortcut: Shortcut {
