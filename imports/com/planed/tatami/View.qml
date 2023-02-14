@@ -29,13 +29,13 @@ QQControls.Pane {
       isAlreadyActive = isActiveView;
       if (isActiveView) {
         root.viewActionsComponent = root.actionBackup || root.viewActionsComponent;
-        root.viewActionsComponent.enabled = true;
+        try { root.viewActionsComponent.enabled = true; } catch (err) {}
         root.actionBackup = null;
         viewActivated();
       }
       else {
         root.actionBackup = root.viewActionsComponent;
-        root.actionBackup.enabled = false;
+        try { root.actionBackup.enabled = false; } catch (err) {}
         root.viewActionsComponent = null;
         viewDeactivated();
       }

@@ -31,8 +31,8 @@ Rectangle {
         property var view: stackView.get(index)
         spacing: 5
         Button {
-          text: formatName(parent.view.viewName)
-          icon.name: parent.view.viewIcon
+          text:      parent.view ? formatName(parent.view.viewName) : ""
+          icon.name: parent.view ? parent.view.viewIcon : ""
           icon.color: "transparent"
           font.family: "Signika"
           font.pointSize: 15
