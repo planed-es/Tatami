@@ -1,7 +1,7 @@
 #ifndef  TATAMITABLEMODEL_H
 # define TATAMITABLEMODEL_H
 
-# include <metarecord/tablemodel.h>
+# include <metarecord-qt/tablemodel.h>
 # include <QtQml/qqml.h>
 # include "Tatami_global.h"
 

@@ -4,7 +4,7 @@
 # include <QObject>
 # include <QMap>
 # include <QByteArray>
-# include <metarecord/metarecordnotifiable.h>
+# include <metarecord-qt/metarecordnotifiable.h>
 # include "../Tatami_global.h"
 
 class TATAMI_EXPORT ModelStore : public QObject

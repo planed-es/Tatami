@@ -1,5 +1,5 @@
 #include "listnavigation.h"
-#include <metarecord/vector.h>
+#include <metarecord-qt/vector.h>
 
 ListNavigationComponent::ListNavigationComponent(QObject* parent) : PaginationComponent(parent), table(this)
 {
