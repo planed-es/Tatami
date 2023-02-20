@@ -21,11 +21,14 @@ public:
   Q_INVOKABLE virtual ModelType* startCreation();
   Q_INVOKABLE virtual void endEdition(bool save, QJSValue callback = QJSValue());
   Q_INVOKABLE virtual void remove(ModelType*, QJSValue callback = QJSValue());
+  Q_INVOKABLE virtual bool canEdit(const ModelType*) { return true; }
+  Q_INVOKABLE virtual bool canRemove(const ModelType*) { return true; }
 
 signals:
   void sampleChanged();
   void sampleAttributesChanged();
   void invalidModel(const ModelType*);
+  void inputError(QString);
 
 private slots:
   void connectSample();
