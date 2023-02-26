@@ -29,6 +29,7 @@ public:
   ModelType*  at(unsigned int index) const;
   ModelType*  findOne(const QVariantMap&, int comparaisonType = MetaRecordComparable::Identical) const;
   ModelArray         getByUid(const QStringList& uids) const;
+  ModelArray         getByUid(const QList<QByteArray>& uids) const;
   ModelArray         filter(const QVariantMap& params) const;
   virtual ModelArray filter(std::function<bool (const ModelType*)>) const;
 

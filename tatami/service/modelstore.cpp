@@ -94,6 +94,16 @@ ModelStore::ModelType* ModelStore::findOne(const QVariantMap& params, int compar
   return it == models.end() ? nullptr : it.value();
 }
 
+ModelStore::ModelArray ModelStore::getByUid(const QList<QByteArray>& uids) const
+{
+  QStringList list;
+
+  list.reserve(uids.size());
+  for (const auto& uid : uids)
+    list << QString(uid);
+  return getByUid(list);
+}
+
 ModelStore::ModelArray ModelStore::getByUid(const QStringList& uids) const
 {
   ModelStore::ModelArray result;
