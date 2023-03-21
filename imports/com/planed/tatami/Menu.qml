@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.12
 import com.planed.tatami 1.0 as Tatami
 
 View {
-  property var actions: []
+  property var actions: loadActions(contentData)
   id: root
   enabled: true
   isViewStackable: true
@@ -22,6 +22,16 @@ View {
 
   function isActionDown(action, currentView) {
     return currentView ? action.text === currentView.viewName : false;
+  }
+
+  function loadActions(contentData) {
+    const actions = [];
+
+    for (var i = 0 ; i < contentData.length ; ++i) {
+      if (contentData[i].toString().startsWith("Action_QMLTYPE"))
+        actions.push(contentData[i]);
+    }
+    return actions;
   }
 
   Component {
