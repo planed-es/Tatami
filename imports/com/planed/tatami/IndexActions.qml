@@ -110,6 +110,7 @@ ActionSet {
     icon.name: "arrow-left"
     enabled: withPagination && page > 0
     sequence: "Alt+Left"
+    autoRepeat: true
     onTriggered: previousPage()
   }
 
@@ -119,6 +120,7 @@ ActionSet {
     icon.name: "arrow-right"
     enabled: withPagination && (page < maxPage || maxPage === -1)
     sequence: "Alt+Right"
+    autoRepeat: true
     onTriggered: nextPage()
   }
 }
