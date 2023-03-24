@@ -164,7 +164,159 @@ Tatami.View {
 
 ### Actions
 
+Action represents an abstract user interface action that can have shortcuts and can be assigned to menu items and toolbar buttons.
+
+Views can expose a set of actions using the _ActionSet_ and _Action_ component: 
+
+- The _Action_ component from Tatami inherits the [Action](https://doc.qt.io/qt-6/qml-qtquick-controls2-action.html) component from _QtQuick.Controls_.
+- The _ActionSet_ component manages a set of actions, enabling or disabling them altogether. It may also be bound to a _View_ which will make the action list appear in the _toolbar_.
+
+#### Adding actions to a view
+
+Adding actions to a view is pretty simple: we just use the `viewActionsComponent` property, allowing us to define a custom `ActionSet` component:
+
+```QML
+import QtQuick 2.12
+import com.planed.tatami 1.0 as Tatami
+
+Tatami.View {
+  viewName: "My view with actions"
+
+  Text {
+    id: viewText
+    anchors.centerIn: parent
+    text: "No action were triggered."
+  }
+
+  viewActionsComponent: Component {
+    Tatami.ActionSet {
+      actions: [action1, action2]
+
+      Tatami.Action {
+        id: action1
+        text: "Action 1"
+        onTriggered: viewText.text = "Action #1 was triggered"
+      }
+
+      Tatami.Action {
+        id: action2
+        text: "Action 2"
+        onTriggered: viewText.text = "Action #2 was triggered"
+      }
+    }
+  }
+}
+```
+
+#### Swapping action sets within a view
+
+In some cases, you may want to make different actions available to your user depending on your own view's context. This can be achieved by declaring multiple `ActionSet` components and updating the `viewActionsComponent` property at runtime:
+
+```QML
+import QtQuick 2.12
+import com.planed.tatami 1.0 as Tatami
+
+Tatami.View {
+  viewName: "My view with multiple action sets"
+
+  Text {
+    id: viewText
+    anchors.centerIn: parent
+    text: "No action were triggered."
+  }
+
+  // Defining a property determining which ActionSet component should be active
+  property int actionState: 0
+
+  // Declaring a bunch of ActionSet
+  Component {
+    id: defaultActionSet
+    Tatami.ActionSet {
+      actions: [action0]
+      Tatami.Action {
+        id: action0
+        text: "Start"
+        onTriggered: actionState = 1
+      }
+    }
+  }
+
+  Component {
+    id: altActionSet1
+    Tatami.ActionSet {
+      actions: [action1]
+      Tatami.Action {
+        id: action1
+        text: "Action 1"
+        onTriggered: {
+          viewText.text = "Action #1 was triggered";
+          actionState = 2;
+        }
+      }
+    }
+  }
+
+  Component {
+    id: altActionSet2
+    Tatami.ActionSet {
+      actions: [action2]
+      Tatami.Action {
+        id: action2
+        text: "Action 2"
+        onTriggered: {
+          viewText.text = "Action #2 was triggered";
+          actionState = 1;
+        }
+      }
+    }
+  }
+
+  // Picking the current action set based on the current value of `actionState`
+  viewActionsComponent: pickActionSet(actionState)
+
+  function pickActionSet(state) {
+    if (state == 0)
+      return defaultActionSet;
+    return state == 1 ? altActionSet1 : altActionSet2;
+  }
+}
+```
+
+Such a system allows different set of actions to be made available to the user in the same view. Furthermore, declaring the `ActionSet` within a `Component` ensures that the action sets aren't always instantiated within the view: instead, only the component currently assigned to the `viewActionsComponent` property is instantiated. This protects you against conflicting shortcuts from multiple action sets.
+
 ### Menus
+
+Tatami also comes with a couple of helper components to help you quickly build menus. Let's create a simple menu view by refactoring our menu from the _Navigation_ tutorial:
+
+```QML
+import QtQuick 2.12
+import com.planed.tatami 1.0 as Tatami
+
+Tatami.Menu {
+  viewName: "My menu"
+  viewIcon: "start-here"
+
+  Tatami.MenuEntry {
+    text: "Option 0"
+    icon.name: "start-here"
+    onTriggered: goToView("MyView.qml")
+  }
+
+  Tatami.MenuEntry {
+    text: "Option 1"
+    icon.name: "start-here"
+    onTriggered: goToView("MyView.qml", { text: "Overloaded text" })
+  }
+
+  Tatami.MenuEntry {
+    text: "Option 2"
+    icon.name: "start-here"
+    onTriggered: goToView("MyView.qml", { text: "Alternative text overload" })
+  }
+}
+```
+
+Note that we are not calling `goToView` from the `application` object anymore. That's because `Menu` comes with its own implementation for `goToView`, implementing different behavior depending on whether the state of the Menu view is _active_ or _stacked_.
 
 ## Services
 
