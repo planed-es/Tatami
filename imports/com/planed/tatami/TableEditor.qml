@@ -46,6 +46,20 @@ Tatami.TableView {
     interval: 5; onTriggered: fields.retakeFocus();
   }
 
+  Timer {
+    id: acceptLimit
+    interval: 250
+    repeat: false
+    running: false
+  }
+
+  function acceptFunnel() {
+    if (!acceptLimit.running) {
+      acceptLimit.restart();
+      root.accepted();
+    }
+  }
+
   Loader {
     id: fieldsLoader
     sourceComponent: TableFields {
@@ -78,10 +92,10 @@ Tatami.TableView {
             if (withConfirmDialog)
               confirmDialog.open();
             else
-              root.accepted();
+              acceptFunnel();
           }
           else if (fields.getCurrentField() === undefined)
-            root.accepted(); // there is nothing to save, but this will make the cursor move to the next line
+            acceptFunnel();
           else
             fields.getCurrentField().accepted();
         }
