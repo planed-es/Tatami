@@ -4,7 +4,7 @@
 NotifiableService::NotifiableService(QObject* parent) : HttpService(parent)
 {
   connect(&websocket, &QWebSocket::textMessageReceived, this, &NotifiableService::receivedNotification);
-  connect(&websocket, QOverload<QAbstractSocket::SocketError>::of(&QWebSocket::error), this, &NotifiableService::receivedNotificationError);
+  connect(&websocket, &QWebSocket::errorOccurred, this, &NotifiableService::receivedNotificationError);
 }
 
 void NotifiableService::enableNotifications(bool value)
