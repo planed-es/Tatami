@@ -13,11 +13,11 @@ View {
     goToView(pageName + "/Index");
   }
 
-  function goToView(viewPath) {
+  function goToView(viewPath, options = {}) {
     if (!isActiveView)
-      application.replaceView(viewPath);
+      application.replaceView(viewPath, options);
     else
-      application.goToView(viewPath);
+      application.goToView(viewPath, options);
   }
 
   function isActionDown(action, currentView) {
