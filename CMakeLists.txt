@@ -4,7 +4,11 @@ project(Tatami)
 
 option(BUILD_TESTS "builds tests" ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml QuickControls2 Network WebSockets)
+find_package(PkgConfig)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Qml QuickControls2 Network WebSockets)
+pkg_check_modules(QI18N REQUIRED Qt${QT_VERSION_MAJOR}I18n>=1.0.0)
+pkg_check_modules(METARECORDQT REQUIRED meta-record-qt${QT_VERSION_MAJOR}>=1.0.0)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD 17)
@@ -29,8 +33,8 @@ list(FILTER cpp_sources EXCLUDE REGEX "tatami/tests/.*")
 link_libraries(
   Qt${QT_MAJOR_VERSION}::Gui
   Qt${QT_MAJOR_VERSION}::WebSockets
-  MetaRecordQt
-  QI18n
+  ${QI18N_LIBRARIES}
+  ${METARECORDQT_LIBRARIES}
 )
 
 qt_add_qml_module(Tatami
