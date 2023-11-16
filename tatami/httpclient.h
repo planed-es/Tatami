@@ -16,6 +16,7 @@ class TATAMI_EXPORT HttpClient : public QNetworkAccessManager
 
   unsigned short runningRequests = 0;
   QUrl           serverUrl;
+  bool           debugMode = false;
 public:
   typedef QNetworkReply ResponseObject;
   typedef QNetworkRequest::Attribute Attribute;

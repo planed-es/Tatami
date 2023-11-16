@@ -2,7 +2,9 @@
 #include <QUrlQuery>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QProcessEnvironment>
 #include <QDebug>
+#include <iostream>
 #include <qi18n.h>
 
 static QJsonArray toJsonArray(const QVector<QByteArray>& source)
@@ -97,7 +99,10 @@ void HttpService::receivedFetchReply(HttpClient::ResponseObject* reply, Callback
   if (reply->attribute(HttpClient::Attribute::HttpStatusCodeAttribute).toUInt() == 200)
   {
     auto a = reply->readAll();
+    auto debugMode = QProcessEnvironment::systemEnvironment().value("HTTP_DEBUG", "0") == "1";
 
+    if (debugMode)
+      std::cout << path.toStdString() << " -> " << a.toStdString() << std::endl;
     if (withReset)
       reset();
     loadFromJson(QJsonDocument::fromJson(a));

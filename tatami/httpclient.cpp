@@ -7,6 +7,7 @@
 #include <QUuid>
 #include <QtWebSockets/QWebSocket>
 #include <QDebug>
+#include <iostream>
 
 const QByteArray HttpClient::userAgent("Tatami/1.0");
 const QUuid applicationUid = QUuid::createUuid();
@@ -15,6 +16,7 @@ static QByteArray defaultServerUrl;
 HttpClient::HttpClient(QObject* parent) : QNetworkAccessManager(parent)
 {
   serverUrl = QProcessEnvironment::systemEnvironment().value("TATAMI_SERVER_URL", defaultServerUrl);
+  debugMode = QProcessEnvironment::systemEnvironment().value("HTTP_DEBUG", "0") == "1";
 }
 
 void HttpClient::setDefaultServerUrl(const QByteArray& value)
@@ -51,16 +53,20 @@ QUrl HttpClient::getUrl(const QByteArray& path, QByteArray scheme) const
   return url;
 }
 
-static void logRequest(const QByteArray& method, const QByteArray& path, const QJsonDocument& document)
+static void logRequest(const QByteArray& method, const QByteArray& path, const QJsonDocument& document, bool debugMode)
 {
   qDebug() << "Tatami:HttpClient:Request:" << method << ' ' << path << ':';
-  //qDebug() << document.toJson(QJsonDocument::Indented).toStdString();
+  if (debugMode)
+    std::cout << document.toJson(QJsonDocument::Indented).toStdString() << std::endl;
 }
 
-static void logResponse(const QByteArray& method, const QByteArray& path, const QJsonDocument& document)
+static void logResponse(const QByteArray& method, const QByteArray& path, const QJsonDocument& document, bool debugMode)
 {
-  qDebug() << "Tatami:HttpClient:Response:" << method << ' ' << path << ':';
-  //qDebug() << document.toJson(QJsonDocument::Indented).toStdString().c_str();
+  if (debugMode)
+  {
+    qDebug() << "Tatami:HttpClient:Response:" << method << ' ' << path << ':';
+    std::cout << document.toJson(QJsonDocument::Indented).toStdString() << std::endl;
+  }
 }
 
 HttpClient::ResponseObject* HttpClient::post(const QByteArray& path, const QJsonDocument& document)
@@ -69,10 +75,15 @@ HttpClient::ResponseObject* HttpClient::post(const QByteArray& path, const QJson
   QNetworkReply*   reply;
   QNetworkRequest* request = new QNetworkRequest(getUrl(path));
 
-  logRequest("POST", path, document);
+  logRequest("POST", path, document, debugMode);
   decorateJsonRequest(*request, body.length());
   incrementRunningRequests();
   reply = QNetworkAccessManager::post(*request, body);
+  connect(reply, &QNetworkReply::finished, [=]()
+  {
+    qDebug() << "Response status =" << reply->attribute(QNetworkRequest::Attribute::HttpStatusCodeAttribute).toUInt();
+    logResponse("POST", path, QJsonDocument::fromJson(reply->readAll()), debugMode);
+  });
   connect(reply, &QNetworkReply::finished, [=]() { delete request; decrementRunningRequests(); });
   return reply;
 }
@@ -83,10 +94,14 @@ HttpClient::ResponseObject* HttpClient::put(const QByteArray& path, const QJsonD
   QNetworkReply*   reply;
   QNetworkRequest* request = new QNetworkRequest(getUrl(path));
 
-  logRequest("PUT", path, document);
+  logRequest("PUT", path, document, debugMode);
   decorateJsonRequest(*request, body.length());
   incrementRunningRequests();
   reply = QNetworkAccessManager::put(*request, body);
+  connect(reply, &QNetworkReply::finished, [=]()
+  {
+    logResponse("PUT", path, QJsonDocument::fromJson(reply->readAll()), debugMode);
+  });
   connect(reply, &QNetworkReply::finished, [=]() { delete request; decrementRunningRequests(); });
   return reply;
 }
@@ -96,10 +111,14 @@ HttpClient::ResponseObject* HttpClient::get(const QByteArray& path)
   QNetworkReply*   reply;
   QNetworkRequest* request = new QNetworkRequest(getUrl(path));
 
-  logRequest("GET", path, QJsonDocument());
+  logRequest("GET", path, QJsonDocument(), debugMode);
   decorateRequest(*request);
   incrementRunningRequests();
   reply = QNetworkAccessManager::get(*request);
+  connect(reply, &QNetworkReply::finished, [=]()
+  {
+    logResponse("GET", path, QJsonDocument::fromJson(reply->readAll()), debugMode);
+  });
   connect(reply, &QNetworkReply::finished, [=]() { delete request; decrementRunningRequests(); });
   return reply;
 }
@@ -110,10 +129,14 @@ HttpClient::ResponseObject* HttpClient::get(const QByteArray& path, const QJsonD
   QNetworkReply*   reply;
   QNetworkRequest* request = new QNetworkRequest(getUrl(path));
 
-  logRequest("GET", path, document);
+  logRequest("GET", path, document, debugMode);
   decorateJsonRequest(*request, body.length());
   incrementRunningRequests();
   reply = QNetworkAccessManager::get(*request);
+  connect(reply, &QNetworkReply::finished, [=]()
+  {
+    logResponse("GET", path, QJsonDocument::fromJson(reply->readAll()), debugMode);
+  });
   connect(reply, &QNetworkReply::finished, [=]() { delete request; decrementRunningRequests(); });
   return reply;
 }
@@ -123,7 +146,7 @@ HttpClient::ResponseObject* HttpClient::destroy(const QByteArray &path)
   QNetworkReply*   reply;
   QNetworkRequest* request = new QNetworkRequest(getUrl(path));
 
-  logRequest("DELETE", path, QJsonDocument());
+  logRequest("DELETE", path, QJsonDocument(), debugMode);
   decorateRequest(*request);
   incrementRunningRequests();
   reply = QNetworkAccessManager::deleteResource(*request);
@@ -136,7 +159,7 @@ void HttpClient::listen(const QByteArray &path, QWebSocket& websocket)
   QByteArray scheme = serverUrl.scheme() == "https" ? "wss" : "ws";
   QNetworkRequest* request = new QNetworkRequest(getUrl(path, scheme));
 
-  logRequest("WebSocket", path, QJsonDocument());
+  logRequest("WebSocket", path, QJsonDocument(), debugMode);
   decorateRequest(*request);
   websocket.open(*request);
 }
