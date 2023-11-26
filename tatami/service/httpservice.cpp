@@ -41,6 +41,7 @@ void HttpService::fetch(Callback userCallback)
   auto* reply    = http.get(path);
   auto  callback = std::bind(&HttpService::receivedFetchReply, this, reply, userCallback, true);
 
+  std::cout << "HttpService::Fetch: fetching " << path.toStdString() << std::endl;
   emit requestStarted();
   connect(reply, &HttpClient::ResponseObject::finished, this, callback);
 }
@@ -95,14 +96,15 @@ void HttpService::fetchUids(const QVector<QByteArray>& uids, Callback userCallba
 
 void HttpService::receivedFetchReply(HttpClient::ResponseObject* reply, Callback callback, bool withReset)
 {
+  auto debugMode = QProcessEnvironment::systemEnvironment().value("HTTP_DEBUG", "0") == "1";
+
   emit requestEnded();
   if (reply->attribute(HttpClient::Attribute::HttpStatusCodeAttribute).toUInt() == 200)
   {
-    auto a = reply->readAll();
-    auto debugMode = QProcessEnvironment::systemEnvironment().value("HTTP_DEBUG", "0") == "1";
+    QByteArray a = reply->readAll();
 
     if (debugMode)
-      std::cout << path.toStdString() << " -> " << a.toStdString() << std::endl;
+      qDebug() << "Tatami::HttpService::receivedFetchReply: " << path << " -> " << a;
     if (withReset)
       reset();
     loadFromJson(QJsonDocument::fromJson(a));
@@ -110,7 +112,9 @@ void HttpService::receivedFetchReply(HttpClient::ResponseObject* reply, Callback
       callback();
   }
   else
+  {
     receivedErrorReply(reply);
+  }
 }
 
 void HttpService::save(ModelType* model, std::function<void()> callback)

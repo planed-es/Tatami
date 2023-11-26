@@ -82,7 +82,7 @@ HttpClient::ResponseObject* HttpClient::post(const QByteArray& path, const QJson
   connect(reply, &QNetworkReply::finished, [=]()
   {
     qDebug() << "Response status =" << reply->attribute(QNetworkRequest::Attribute::HttpStatusCodeAttribute).toUInt();
-    logResponse("POST", path, QJsonDocument::fromJson(reply->readAll()), debugMode);
+    //logResponse("POST", path, QJsonDocument::fromJson(reply->readAll()), debugMode);
   });
   connect(reply, &QNetworkReply::finished, [=]() { delete request; decrementRunningRequests(); });
   return reply;
@@ -100,7 +100,7 @@ HttpClient::ResponseObject* HttpClient::put(const QByteArray& path, const QJsonD
   reply = QNetworkAccessManager::put(*request, body);
   connect(reply, &QNetworkReply::finished, [=]()
   {
-    logResponse("PUT", path, QJsonDocument::fromJson(reply->readAll()), debugMode);
+    //logResponse("PUT", path, QJsonDocument::fromJson(reply->readAll()), debugMode);
   });
   connect(reply, &QNetworkReply::finished, [=]() { delete request; decrementRunningRequests(); });
   return reply;
@@ -117,7 +117,7 @@ HttpClient::ResponseObject* HttpClient::get(const QByteArray& path)
   reply = QNetworkAccessManager::get(*request);
   connect(reply, &QNetworkReply::finished, [=]()
   {
-    logResponse("GET", path, QJsonDocument::fromJson(reply->readAll()), debugMode);
+    //logResponse("GET", path, QJsonDocument::fromJson(reply->readAll()), debugMode);
   });
   connect(reply, &QNetworkReply::finished, [=]() { delete request; decrementRunningRequests(); });
   return reply;
@@ -135,7 +135,7 @@ HttpClient::ResponseObject* HttpClient::get(const QByteArray& path, const QJsonD
   reply = QNetworkAccessManager::get(*request);
   connect(reply, &QNetworkReply::finished, [=]()
   {
-    logResponse("GET", path, QJsonDocument::fromJson(reply->readAll()), debugMode);
+    //logResponse("GET", path, QJsonDocument::fromJson(reply->readAll()), debugMode);
   });
   connect(reply, &QNetworkReply::finished, [=]() { delete request; decrementRunningRequests(); });
   return reply;
