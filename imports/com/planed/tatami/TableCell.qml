@@ -2,6 +2,9 @@ import QtQuick 2.12
 
 Rectangle {
   id: root
+  required property variant  displayValue
+  required property QtObject model
+  required property string   propertyName
   property var table
   property var defaultComponent
   property bool isPair: row % 2 > 0
@@ -33,9 +36,9 @@ Rectangle {
 
   Loader {
     id: cellComponent
-    property string   propertyName: table.model.propertyAt(column)
-    property QtObject model:        table.model.modelAt(row)
-    property variant  value:        display
+    property string   propertyName: root.propertyName
+    property QtObject model:        root.model
+    property variant  value:        root.displayValue
     property int      index:        row
     property int      colIndex:     column
     anchors.fill: parent
