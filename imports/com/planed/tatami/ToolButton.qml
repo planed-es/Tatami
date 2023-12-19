@@ -20,10 +20,10 @@ QQControls.ToolButton {
   Text {
     text: action.shortcut ? `<i>${action.shortcut.nativeText}</i>` : ""
     anchors.bottom: parent.bottom
-    anchors.bottomMargin: 5
+    anchors.bottomMargin: 3
     anchors.left: parent.left
     anchors.leftMargin: 45
-    font.pixelSize: 20
+    font.pixelSize: 16
     color: control.enabled ? "black" : "grey"
   }
 }
