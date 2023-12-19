@@ -54,7 +54,7 @@ Rectangle {
   MouseArea {
     anchors.fill:    parent
     enabled:         table.navigationEnabled
-    onClicked:       table.currentIndex = row
+    onClicked:       table.model.currentIndex = row
     onDoubleClicked: table.activated(row, cellComponent.model)
   }
 
