@@ -5,6 +5,7 @@
 # else
 #  include <QtNetwork/QNetworkAccessManager>
 #  include <QtNetwork/QNetworkReply>
+#  include <QtNetwork/QAuthenticator>
 #  include "Tatami_global.h"
 
 class QJsonDocument;
@@ -26,6 +27,7 @@ public:
   HttpClient(QObject* parent = nullptr);
 
   static void setDefaultServerUrl(const QByteArray& value);
+  static void setCredentials(const QString& username, const QString& password);
   void setServerUrl(const QUrl& value) { serverUrl = value; }
   inline bool isBusy() const { return runningRequests > 0; }
 
@@ -38,6 +40,9 @@ public:
 
 signals:
   void busyChanged();
+
+private slots:
+  void authenticateQuery(QNetworkReply*, QAuthenticator*);
 
 private:
   virtual QUrl getUrl(const QByteArray& path, QByteArray protocol = "") const;

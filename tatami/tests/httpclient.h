@@ -41,6 +41,7 @@ public:
 
   HttpClient(QObject* parent = nullptr) : QObject(parent) {}
 
+  static void setCredentials(const QString& username, const QString& password) {}
   void setServerUrl(const QUrl& value) { serverUrl = value; }
   QUrl getServerUrl() const { return serverUrl; }
   inline bool isBusy() const { return false; }

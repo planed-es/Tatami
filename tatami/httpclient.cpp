@@ -12,16 +12,31 @@
 const QByteArray HttpClient::userAgent("Tatami/1.0");
 const QUuid applicationUid = QUuid::createUuid();
 static QByteArray defaultServerUrl;
+static QString username;
+static QString password;
 
 HttpClient::HttpClient(QObject* parent) : QNetworkAccessManager(parent)
 {
   serverUrl = QProcessEnvironment::systemEnvironment().value("TATAMI_SERVER_URL", defaultServerUrl);
   debugMode = QProcessEnvironment::systemEnvironment().value("HTTP_DEBUG", "0") == "1";
+  connect(this, &QNetworkAccessManager::authenticationRequired, this, &HttpClient::authenticateQuery);
+}
+
+void HttpClient::authenticateQuery(QNetworkReply*, QAuthenticator* authenticator)
+{
+  authenticator->setUser(username);
+  authenticator->setPassword(password);
 }
 
 void HttpClient::setDefaultServerUrl(const QByteArray& value)
 {
   defaultServerUrl = value;
+}
+
+void HttpClient::setCredentials(const QString& username_, const QString& password_)
+{
+  username = username_;
+  password = password_;
 }
 
 void HttpClient::decorateRequest(QNetworkRequest& request) const
