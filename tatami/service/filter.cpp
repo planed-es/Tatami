@@ -11,5 +11,5 @@ static int getCompareStrategyFromFilter(const QVariantMap& params)
 
 bool filterWithVariantMap(const QVariantMap& params, const MetaRecordComparable* model)
 {
-  return model->compare(params, getCompareStrategyFromFilter(params));
+  return model && model->compare(params, getCompareStrategyFromFilter(params));
 }
