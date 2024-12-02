@@ -15,7 +15,7 @@ QQControls.ToolButton {
   icon.width: 32
   icon.height: 32
 
-  text: label + (action.shortcut ? "<br/>" : "")
+  text: label + (action.shortcut ? "\n" : "")
 
   Text {
     text: action.shortcut ? `<i>${action.shortcut.nativeText}</i>` : ""

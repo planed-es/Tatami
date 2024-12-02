@@ -65,8 +65,7 @@ View {
   Component {
     id: menuEntryText
     Label {
-      horizontalAlignment: Qt.AlignHCenter
-      verticalAlignment: Qt.AlignVCenter
+      Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
       text: action.text.charAt(0).toUpperCase() + action.text.slice(1)
       font.family: "Signika"
       font.pointSize: 18
