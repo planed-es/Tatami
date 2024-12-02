@@ -84,7 +84,7 @@ static void logResponse(const QByteArray& method, const QByteArray& path, const 
   }
 }
 
-HttpClient::ResponseObject* HttpClient::post(const QByteArray& path, const QJsonDocument& document)
+HttpClient::ResponseObject* HttpClient::post(const QByteArray& path, const QJsonDocument& document, Callback callback)
 {
   QByteArray       body = document.toJson();
   QNetworkReply*   reply;
@@ -98,12 +98,13 @@ HttpClient::ResponseObject* HttpClient::post(const QByteArray& path, const QJson
   {
     qDebug() << "Response status =" << reply->attribute(QNetworkRequest::Attribute::HttpStatusCodeAttribute).toUInt();
     //logResponse("POST", path, QJsonDocument::fromJson(reply->readAll()), debugMode);
+    if (callback) { callback(reply); }
   });
   connect(reply, &QNetworkReply::finished, [=]() { delete request; decrementRunningRequests(); });
   return reply;
 }
 
-HttpClient::ResponseObject* HttpClient::put(const QByteArray& path, const QJsonDocument& document)
+HttpClient::ResponseObject* HttpClient::put(const QByteArray& path, const QJsonDocument& document, Callback callback)
 {
   QByteArray       body = document.toJson();
   QNetworkReply*   reply;
@@ -113,15 +114,13 @@ HttpClient::ResponseObject* HttpClient::put(const QByteArray& path, const QJsonD
   decorateJsonRequest(*request, body.length());
   incrementRunningRequests();
   reply = QNetworkAccessManager::put(*request, body);
-  connect(reply, &QNetworkReply::finished, [=]()
-  {
-    //logResponse("PUT", path, QJsonDocument::fromJson(reply->readAll()), debugMode);
-  });
+  if (callback)
+    connect(reply, &QNetworkReply::finished, std::bind(callback, reply));
   connect(reply, &QNetworkReply::finished, [=]() { delete request; decrementRunningRequests(); });
   return reply;
 }
 
-HttpClient::ResponseObject* HttpClient::get(const QByteArray& path)
+HttpClient::ResponseObject* HttpClient::get(const QByteArray& path, Callback callback)
 {
   QNetworkReply*   reply;
   QNetworkRequest* request = new QNetworkRequest(getUrl(path));
@@ -130,15 +129,13 @@ HttpClient::ResponseObject* HttpClient::get(const QByteArray& path)
   decorateRequest(*request);
   incrementRunningRequests();
   reply = QNetworkAccessManager::get(*request);
-  connect(reply, &QNetworkReply::finished, [=]()
-  {
-    //logResponse("GET", path, QJsonDocument::fromJson(reply->readAll()), debugMode);
-  });
+  if (callback)
+    connect(reply, &QNetworkReply::finished, std::bind(callback, reply));
   connect(reply, &QNetworkReply::finished, [=]() { delete request; decrementRunningRequests(); });
   return reply;
 }
 
-HttpClient::ResponseObject* HttpClient::get(const QByteArray& path, const QJsonDocument& document)
+HttpClient::ResponseObject* HttpClient::get(const QByteArray& path, const QJsonDocument& document, Callback callback)
 {
   QByteArray       body = document.toJson();
   QNetworkReply*   reply;
@@ -148,15 +145,13 @@ HttpClient::ResponseObject* HttpClient::get(const QByteArray& path, const QJsonD
   decorateJsonRequest(*request, body.length());
   incrementRunningRequests();
   reply = QNetworkAccessManager::get(*request);
-  connect(reply, &QNetworkReply::finished, [=]()
-  {
-    //logResponse("GET", path, QJsonDocument::fromJson(reply->readAll()), debugMode);
-  });
+  if (callback)
+    connect(reply, &QNetworkReply::finished, std::bind(callback, reply));
   connect(reply, &QNetworkReply::finished, [=]() { delete request; decrementRunningRequests(); });
   return reply;
 }
 
-HttpClient::ResponseObject* HttpClient::destroy(const QByteArray &path)
+HttpClient::ResponseObject* HttpClient::destroy(const QByteArray &path, Callback callback)
 {
   QNetworkReply*   reply;
   QNetworkRequest* request = new QNetworkRequest(getUrl(path));
@@ -165,6 +160,8 @@ HttpClient::ResponseObject* HttpClient::destroy(const QByteArray &path)
   decorateRequest(*request);
   incrementRunningRequests();
   reply = QNetworkAccessManager::deleteResource(*request);
+  if (callback)
+    connect(reply, &QNetworkReply::finished, std::bind(callback, reply));
   connect(reply, &QNetworkReply::finished, [=]() { delete request; decrementRunningRequests(); });
   return reply;
 }

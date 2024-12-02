@@ -21,6 +21,7 @@ class TATAMI_EXPORT HttpClient : public QNetworkAccessManager
 public:
   typedef QNetworkReply ResponseObject;
   typedef QNetworkRequest::Attribute Attribute;
+  typedef std::function<void(ResponseObject*)> Callback;
 
   static const QByteArray userAgent;
 
@@ -31,11 +32,11 @@ public:
   void setServerUrl(const QUrl& value) { serverUrl = value; }
   inline bool isBusy() const { return runningRequests > 0; }
 
-  ResponseObject* post(const QByteArray& path, const QJsonDocument&);
-  ResponseObject* put(const QByteArray& path, const QJsonDocument&);
-  ResponseObject* get(const QByteArray& path);
-  ResponseObject* get(const QByteArray& path, const QJsonDocument&);
-  ResponseObject* destroy(const QByteArray& path);
+  ResponseObject* post(const QByteArray& path, const QJsonDocument&, Callback = Callback());
+  ResponseObject* put(const QByteArray& path, const QJsonDocument&, Callback = Callback());
+  ResponseObject* get(const QByteArray& path, Callback = Callback());
+  ResponseObject* get(const QByteArray& path, const QJsonDocument&, Callback = Callback());
+  ResponseObject* destroy(const QByteArray& path, Callback = Callback());
   void            listen(const QByteArray& path, QWebSocket&);
 
 signals:

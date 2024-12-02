@@ -38,6 +38,7 @@ class TATAMI_EXPORT HttpClient : public QObject
 public:
   typedef StubResponse ResponseObject;
   typedef StubResponse::Attribute Attribute;
+  typedef std::function<void(ResponseObject*)> Callback;
 
   HttpClient(QObject* parent = nullptr) : QObject(parent) {}
 
@@ -46,11 +47,11 @@ public:
   QUrl getServerUrl() const { return serverUrl; }
   inline bool isBusy() const { return false; }
 
-  StubResponse* get(const QByteArray& path);
-  StubResponse* get(const QByteArray& path, const QJsonDocument& document);
-  StubResponse* put(const QByteArray& path, const QJsonDocument& document);
-  StubResponse* post(const QByteArray& path, const QJsonDocument& document);
-  StubResponse* destroy(const QByteArray path);
+  StubResponse* get(const QByteArray& path, Callback = Callback());
+  StubResponse* get(const QByteArray& path, const QJsonDocument& document, Callback = Callback());
+  StubResponse* put(const QByteArray& path, const QJsonDocument& document, Callback = Callback());
+  StubResponse* post(const QByteArray& path, const QJsonDocument& document, Callback = Callback());
+  StubResponse* destroy(const QByteArray path, Callback = Callback());
   void          listen(const QByteArray& path, QWebSocket&) {}
 
 private:
