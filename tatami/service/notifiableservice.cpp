@@ -4,7 +4,11 @@
 NotifiableService::NotifiableService(QObject* parent) : HttpService(parent)
 {
   connect(&websocket, &QWebSocket::textMessageReceived, this, &NotifiableService::receivedNotification);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
   connect(&websocket, &QWebSocket::errorOccurred, this, &NotifiableService::receivedNotificationError);
+#else
+  connect(&websocket, static_cast<void (QWebSocket::*)(QAbstractSocket::SocketError)>(&QWebSocket::error), this, &NotifiableService::receivedNotificationError);
+#endif
 }
 
 void NotifiableService::enableNotifications(bool value)
