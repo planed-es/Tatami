@@ -4,6 +4,7 @@
 NotifiableService::NotifiableService(QObject* parent) : HttpService(parent)
 {
   connect(&websocket, &QWebSocket::textMessageReceived, this, &NotifiableService::receivedNotification);
+  connect(&websocket, &QWebSocket::authenticationRequired, &http, std::bind(&HttpClient::authenticateQuery, &http, nullptr, std::placeholders::_1));
 #if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
   connect(&websocket, &QWebSocket::errorOccurred, this, &NotifiableService::receivedNotificationError);
 #else

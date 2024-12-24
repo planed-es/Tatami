@@ -46,3 +46,7 @@ StubResponse* HttpClient::destroy(const QByteArray path, Callback callback)
   if (callback) { callback(&response); }
   return &response;
 }
+
+void HttpClient::authenticateQuery(QNetworkReply*, QAuthenticator*)
+{
+}

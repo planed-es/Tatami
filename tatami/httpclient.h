@@ -42,7 +42,7 @@ public:
 signals:
   void busyChanged();
 
-private slots:
+public slots:
   void authenticateQuery(QNetworkReply*, QAuthenticator*);
 
 private:

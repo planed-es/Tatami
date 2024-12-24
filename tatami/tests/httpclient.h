@@ -7,6 +7,8 @@
 # include "../Tatami_global.h"
 
 class QWebSocket;
+class QNetworkReply;
+class QAuthenticator;
 
 class TATAMI_EXPORT StubResponse : public QObject
 {
@@ -53,6 +55,9 @@ public:
   StubResponse* post(const QByteArray& path, const QJsonDocument& document, Callback = Callback());
   StubResponse* destroy(const QByteArray path, Callback = Callback());
   void          listen(const QByteArray& path, QWebSocket&) {}
+
+public slots:
+  void authenticateQuery(QNetworkReply*, QAuthenticator*);
 
 private:
   QUrl serverUrl;
