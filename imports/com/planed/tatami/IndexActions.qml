@@ -1,31 +1,19 @@
 import QtQuick 2.12
 
-ActionSet {
+PaginatedActions {
   property bool withAdd: true
   property bool withFilters: false
   property bool withRemove: false
-  property bool withPagination: false
   property bool withPrint: false
-  property int page:    withPagination ? root.controller.page : 0
-  property int maxPage: withPagination ? root.controller.maxPage : -1
 
   function labelForAction(actionName) {
     return i18n.t(actionName, { resourceName: i18n.t("model." + view.resourceName) });
-  }
-
-  function preparePaginationActions(array) {
-    array.push(previousPageAction);
-    array.push(nextPageAction);
-    return array;
   }
 
   function prepareFiltersAction(array) {
     array.push(filterAction);
     array.push(clearFilterAction);
     return array;
-  }
-
-  function prepareExtraActions(array) {
   }
 
   generateActions: function() {
@@ -38,7 +26,7 @@ ActionSet {
       array.push(removeAction);
     if (withPrint)
       array.push(printAction);
-    prepareExtraActions(array);
+    prepareExtraActions(array); // from PaginatedActions
     if (withPagination)
       preparePaginationActions(array);
     return array;
@@ -48,15 +36,11 @@ ActionSet {
   onWithRemoveChanged:     prepareActions()
   onWithPaginationChanged: prepareActions()
   onWithPrintChanged:      prepareActions()
-  onPreviousPage:          root.controller.previousPage()
-  onNextPage:              root.controller.nextPage()
 
   signal add()
   signal remove()
   signal focusFilters()
   signal clearFilters()
-  signal previousPage()
-  signal nextPage()
   signal printRequested()
 
   Action {
@@ -102,25 +86,5 @@ ActionSet {
     enabled: withPrint
     sequence: "F9"
     onTriggered: printRequested()
-  }
-
-  Action {
-    id: previousPageAction
-    text: i18n.t("actions.previousPage")
-    icon.name: "arrow-left"
-    enabled: withPagination && page > 0
-    sequence: "Alt+Left"
-    autoRepeat: true
-    onTriggered: previousPage()
-  }
-
-  Action {
-    id: nextPageAction
-    text: i18n.t("actions.nextPage")
-    icon.name: "arrow-right"
-    enabled: withPagination && (page < maxPage || maxPage === -1)
-    sequence: "Alt+Right"
-    autoRepeat: true
-    onTriggered: nextPage()
   }
 }
