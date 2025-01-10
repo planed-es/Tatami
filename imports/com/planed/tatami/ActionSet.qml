@@ -7,6 +7,8 @@ Item {
   property bool backEnabled: true
   property var generateActions: null
 
+  signal actionTriggered(QtObject action);
+
   Component.onCompleted: {
     prepareActions();
     application.backEnabled = backEnabled;
@@ -20,15 +22,31 @@ Item {
   }
 
   function prepareActions() {
-    if (generateActions !== null)
-      actions = generateActions();
-    actions.forEach(action => { action.actionSet = self; });
+    try {
+      if (generateActions !== null)
+        actions = generateActions();
+      actions.forEach(action => { action.actionSet = self; });
+    } catch (err) {
+      console.log("Tatami.ActionSet.prepareActions: ", err);
+    }
     self.attachActions();
   }
 
   function attachActions() {
     if (view)
       view.viewActions = actions;
+  }
+
+  Repeater {
+    model: self.actions
+    delegate: Item {
+      Connections {
+        target: self.actions[index]
+        function onTriggered() {
+          self.actionTriggered(self.actions[index]);
+        }
+      }
+    }
   }
 
   enabled: view ? view.isActiveView : true
