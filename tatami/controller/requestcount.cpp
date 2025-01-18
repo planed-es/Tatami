@@ -11,12 +11,26 @@ void RequestCountComponent::resetRequestCount()
 {
   TatamiGlobalState* globalState = TatamiGlobalState::get();
 
-  while (pendingRequestCount > 0)
+  if (globalState)
   {
-    pendingRequestCount--;
-    if (globalState)
+    while (ownedPendingRequestCount > 0)
+    {
+      ownedPendingRequestCount--;
       globalState->decrementPendingRequestCount();
+    }
   }
+}
+
+void RequestCountComponent::connectWith(RequestCountComponent* other)
+{
+  connect(other, &RequestCountComponent::requestStarted, this, &RequestCountComponent::watchedRequestStarted);
+  connect(other, &RequestCountComponent::requestEnded,   this, &RequestCountComponent::watchedRequestEnded);
+}
+
+void RequestCountComponent::disconnectFrom(RequestCountComponent* other)
+{
+  disconnect(other, &RequestCountComponent::requestStarted, this, &RequestCountComponent::watchedRequestStarted);
+  disconnect(other, &RequestCountComponent::requestEnded,   this, &RequestCountComponent::watchedRequestEnded);
 }
 
 void RequestCountComponent::connectWith(HttpService* service)
@@ -31,23 +45,36 @@ void RequestCountComponent::disconnectFrom(HttpService* service)
   disconnect(service, &HttpService::requestEnded,   this, &RequestCountComponent::onRequestEnded);
 }
 
+void RequestCountComponent::watchedRequestStarted()
+{
+  pendingRequestCount++;
+  emit requestStarted();
+}
+
+void RequestCountComponent::watchedRequestEnded()
+{
+  if (pendingRequestCount > 0)
+    pendingRequestCount--;
+  emit requestEnded();
+}
+
 void RequestCountComponent::onRequestStarted()
 {
   TatamiGlobalState* globalState = TatamiGlobalState::get();
 
-  pendingRequestCount++;
+  ownedPendingRequestCount++;
   if (globalState)
     globalState->incrementPendingRequestCount();
-  emit requestStarted();
+  watchedRequestStarted();
 }
 
 void RequestCountComponent::onRequestEnded()
 {
   TatamiGlobalState* globalState = TatamiGlobalState::get();
 
-  if (pendingRequestCount > 0)
-    pendingRequestCount--;
+  if (ownedPendingRequestCount > 0)
+    ownedPendingRequestCount--;
   if (globalState)
     globalState->decrementPendingRequestCount();
-  emit requestEnded();
+  watchedRequestEnded();
 }

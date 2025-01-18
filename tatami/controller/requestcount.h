@@ -16,6 +16,8 @@ public:
   inline bool hasPendingRequests() const { return pendingRequestCount > 0; }
 
 protected:
+  void connectWith(RequestCountComponent*);
+  void disconnectFrom(RequestCountComponent*);
   void connectWith(HttpService*);
   void disconnectFrom(HttpService*);
   void resetRequestCount();
@@ -28,8 +30,13 @@ public slots:
   void onRequestStarted();
   void onRequestEnded();
 
+private slots:
+  void watchedRequestStarted();
+  void watchedRequestEnded();
+
 private:
   int pendingRequestCount = 0;
+  int ownedPendingRequestCount = 0;
 };
 
 #endif
