@@ -36,7 +36,7 @@ QQControls.ToolBar {
       delegate: ToolButton {
         Layout.alignment: Qt.AlignLeft
         action: model.modelData
-        visible: enabled
+        visible: enabled && viewActions[index].hidden !== true
       }
     }
 

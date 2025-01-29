@@ -6,6 +6,7 @@ QQControls.Action {
   property var sequences: []
   property QtObject actionSet
   property bool autoRepeat: false
+  property bool hidden: false
   id: action
   shortcut: Shortcut {
     context: Qt.WindowShortcut
