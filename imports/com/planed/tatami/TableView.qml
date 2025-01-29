@@ -4,32 +4,54 @@ import "." as Tatami
 
 TableView {
   id: root
-  property int    currentIndex: model.currentIndex
-  property int    cellMargin: 5
-  property string mainColumn: "name"
-  property bool   navigationEnabled:     true
-  property var    actionComponent:       null
-  property var    style:                 applicationTableStyle
-  property var    cellComponentProvider: function(row, column, propertyName) { return null; }
-  property var    defaultCellDisplayer:  Helpers.defaultCellDisplayer;
-  property var    rightAlignedCells: ["amount","kgs","costByKg","expense"];
-  property QtObject currentObject: model.modelAt(model.currentIndex)
+  property int      cellMargin: 5
+  property string   mainColumn: "name"
+  property bool     navigationEnabled:     true
+  property var      actionComponent:       null
+  property var      style:                 applicationTableStyle
+  property var      cellComponentProvider: function(row, column, propertyName) { return null; }
+  property var      defaultCellDisplayer:  Helpers.defaultCellDisplayer;
+  property var      rightAlignedCells:     ["amount","kgs","costByKg","expense"];
+  property QtObject paginationComponent:   null
+  readonly property int      currentIndex: model.currentIndex
+  readonly property QtObject currentObject: model.modelAt(model.currentIndex)
 
   signal activated(int row, QtObject model)
   signal reloadRow(int row)
 
-  function incrementIndex() {
-    if (model.currentIndex + 1 >= rows)
+  function isOnLastRow() { return model.currentIndex + 1 >= rows; }
+  function isOnFirstRow() { return model.currentIndex - 1 < 0; }
+
+  function incrementPage() {
+    if (paginationComponent.page <= paginationComponent.maxPage - 1) {
       model.currentIndex = 0;
-    else
+      paginationComponent.nextPage();
+    }
+  }
+
+  function decrementPage() {
+    if (paginationComponent.page > 0) {
+      paginationComponent.previousPage();
+      model.currentIndex = rows - 1;
+    }
+  }
+
+  function incrementIndex() {
+    if (!isOnLastRow())
       model.currentIndex++;
+    else if (paginationComponent)
+      incrementPage();
+    else
+      model.currentIndex = 0;
   }
 
   function decrementIndex() {
-    if (model.currentIndex - 1 < 0)
-      model.currentIndex = rows - 1;
-    else
+    if (!isOnFirstRow())
       model.currentIndex--;
+    else if (paginationComponent)
+      decrementPage();
+    else
+      model.currentIndex = rows - 1;
   }
 
   columnSpacing: 1
