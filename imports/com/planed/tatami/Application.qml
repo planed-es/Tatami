@@ -8,6 +8,7 @@ Tatami.Window {
   property alias backEnabled: toolBar.backEnabled
   property alias stackView: mainView
   property alias toolBar: toolBar
+  property alias toolBarWidget: toolBar.additionalWidget
   property var modal: null
   property int transitionDuration: 250
   property real viewOffset: {

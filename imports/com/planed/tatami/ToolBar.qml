@@ -7,6 +7,7 @@ QQControls.ToolBar {
   property var viewActions: []
   property bool backEnabled: true
   property alias exitAction: exitAction
+  property Component additionalWidget
   height: 60
   clip: true
 
@@ -43,18 +44,14 @@ QQControls.ToolBar {
       Layout.fillWidth: true
     }
 
-    QQControls.ToolSeparator {}
+    QQControls.ToolSeparator {
+      visible: additionalWidget != null
+    }
 
-    QQControls.Label {
+    Loader {
       Layout.alignment: Qt.AlignRight
       Layout.rightMargin: 10
-      Timer {
-        interval: 1000; running: true; repeat: true;
-        onTriggered: {
-          var date = new Date();
-          parent.text = date.toLocaleString()
-        }
-      }
+      sourceComponent: additionalWidget
     }
   }
 }

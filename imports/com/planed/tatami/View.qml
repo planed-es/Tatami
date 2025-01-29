@@ -13,7 +13,6 @@ QQControls.Pane {
   property string viewPicto: viewIcon
   property string viewScope: ""
   property bool isViewStackable: false
-  property Component stackState
   enabled: isActiveView
   state: "popped"
 
