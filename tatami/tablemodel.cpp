@@ -17,7 +17,7 @@ int TatamiTableModel::maxWidthForProperty(const QByteArray& propertyName, const 
     const Column& column = columns[columnIndex];
     QFont         font = fontName.isEmpty() ? QFont() : QFont(fontName, fontSize);
     QFontMetrics  metrics(font);
-    int           maxLength = metrics.horizontalAdvance(column.label);
+    int           maxLength = 40;// metrics.horizontalAdvance(column.label);
 
     if (column.enforcedWidth)
       return static_cast<int>(column.enforcedWidth);
