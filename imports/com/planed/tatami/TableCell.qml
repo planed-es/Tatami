@@ -9,6 +9,7 @@ Rectangle {
   property var defaultComponent
   property bool isPair: row % 2 > 0
   property color inactiveColor: isPair ? table.style.backgroundColor : table.style.altBackgroundColor
+  property color fontColor: table.style.textColor
 
   function reload() {
     const customComponent = table.cellComponentProvider(row, cellComponent.index, cellComponent.propertyName);
@@ -27,15 +28,18 @@ Rectangle {
     State {
       name: "active";   when: row === table.currentIndex && table.state == "active"
       PropertyChanges { target: root; color: table.style.selectionColor }
+      PropertyChanges { target: root; fontColor: table.style.selectionTextColor }
     },
     State {
       name: "inactive"; when: row !== table.currentIndex || table.state != "active"
       PropertyChanges { target: root; color: inactiveColor }
+      PropertyChanges { target: root; fontColor: table.style.textColor }
     }
   ]
 
   Loader {
     id: cellComponent
+    property color    fontColor:    root.fontColor
     property string   propertyName: root.propertyName
     property QtObject model:        root.model
     property variant  value:        root.displayValue
@@ -65,7 +69,15 @@ Rectangle {
   }
 
   transitions: [
-    Transition { to: "active";   ColorAnimation { target: root; property: "color"; to: table.style.selectionColor; duration: 150 } },
-    Transition { to: "inactive"; ColorAnimation { target: root; property: "color"; to: inactiveColor; duration: 150 } }
+    Transition {
+      to: "active";
+      ColorAnimation { target: root; property: "color"; to: table.style.selectionColor; duration: 150 }
+      ColorAnimation { target: root; property: "fontColor"; to: table.style.selectionTextColor; duration: 150 }
+    },
+    Transition {
+      to: "inactive"
+      ColorAnimation { target: root; property: "color"; to: inactiveColor; duration: 150 }
+      ColorAnimation { target: root; property: "fontColor"; to: table.style.textColor; duration: 150 }
+    }
   ]
 }

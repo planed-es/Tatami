@@ -3,7 +3,9 @@ import QtQuick 2.12
 Item {
   property color  headerBackgroundColor: "#CCCCCC"
   property color  headerTextColor:       "#000000"
+  property color  textColor:             "#000000"
   property color  selectionColor:        "#3E65FF"
+  property color  selectionTextColor:    "#FFFFFF"
   property color  backgroundColor:       "#e2e2e2"
   property color  altBackgroundColor:    "#FFFFFF"
   property string fontHeaderName:        "Signika"

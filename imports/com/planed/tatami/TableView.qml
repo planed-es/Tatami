@@ -102,6 +102,7 @@ TableView {
     backgroundColor: "#a1a1a1"
     altBackgroundColor: "#e2e2e2"
     headerTextColor: "#474747"
+    selectionTextColor: textColor
   }
 
   Component {
@@ -109,9 +110,11 @@ TableView {
     Text {
       padding: root.cellMargin
       text: root.defaultCellDisplayer(value, propertyName)
+      color: fontColor
       font.family: root.style.fontName
       font.pointSize: root.style.fontPointSize
       font.capitalization: Font.AllUppercase
+      fontSizeMode: Text.HorizontalFit
       verticalAlignment: Text.AlignVCenter
       horizontalAlignment: root.rightAlignedCells.indexOf(propertyName) >= 0 ? Text.AlignRight : Text.AlignLeft
     }
