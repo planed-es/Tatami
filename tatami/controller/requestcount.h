@@ -5,6 +5,7 @@
 # include "../Tatami_global.h"
 
 class HttpService;
+class QNetworkReply;
 
 class TATAMI_EXPORT RequestCountComponent : public QObject
 {
@@ -20,6 +21,7 @@ protected:
   void disconnectFrom(RequestCountComponent*);
   void connectWith(HttpService*);
   void disconnectFrom(HttpService*);
+  void watchRequest(QNetworkReply*);
   void resetRequestCount();
 
 signals:
