@@ -1,5 +1,7 @@
 #include "controller.h"
 #include "service/filter.h"
+#include "subsetservice.h"
+#include "controller/multiplepicker.h"
 
 TatamiController::TatamiController(QObject* parent) : ListNavigationComponent(parent)
 {
@@ -59,6 +61,18 @@ void TatamiController::useDefaultColumns()
   }
   else
     qDebug() << "TatamiController::useDefaultColumns called, but service is null.";
+}
+
+TatamiMultiplePickerController* TatamiController::makeMultiplePickerController()
+{
+  auto* controller = new TatamiMultiplePickerController(this);
+  auto* service = new SubsetService(getService(), [this](const ModelType* model) -> bool
+  {
+    return filter(model);
+  });
+
+  controller->useService(service);
+  return controller;
 }
 
 void TatamiController::enableNotifications(bool value)

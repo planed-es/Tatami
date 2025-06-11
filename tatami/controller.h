@@ -4,6 +4,8 @@
 # include "service.h"
 # include "controller/listnavigation.h"
 
+class TATAMI_EXPORT TatamiMultiplePickerController;
+
 class TATAMI_EXPORT TatamiController : public ListNavigationComponent
 {
   Q_OBJECT
@@ -33,6 +35,8 @@ public:
   bool                    notificationsEnabled() const { return withNotifications; }
   TatamiServiceInterface* getService() const { return service; }
   const QVariantMap&      getFilters() const { return filters; }
+
+  Q_INVOKABLE TatamiMultiplePickerController* makeMultiplePickerController();
 
 signals:
   void notificationsEnabledChanged();

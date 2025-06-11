@@ -2,6 +2,7 @@
 #include "tatami/tablemodel.h"
 #include "tatami/controller.h"
 #include "tatami/edit_controller.h"
+#include "tatami/controller/multiplepicker.h"
 #include <qqml.h>
 #include <QtGui/QFontDatabase>
 
@@ -23,4 +24,6 @@ void TatamiPlugin::registerTypes(const char *uri)
   qRegisterMetaType<TatamiController*>("TatamiController*");
   qRegisterMetaType<TatamiEditController*>("const TatamiEditController*");
   qRegisterMetaType<TatamiEditController*>("TatamiEditController*");
+  qRegisterMetaType<TatamiMultiplePickerController*>("const TatamiMultiplePickerController*");
+  qRegisterMetaType<TatamiMultiplePickerController*>("TatamiMultiplePickerController*");
 }
