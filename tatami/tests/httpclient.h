@@ -23,6 +23,7 @@ public:
 
   QVariant attribute(Attribute) { return status; }
   QByteArray readAll() const { return body; }
+  bool isFinished() const { return true; }
 
   int           status = 200;
   QByteArray    body;

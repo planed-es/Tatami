@@ -17,7 +17,6 @@ Fields {
     const callbackParam = properties.callback;
 
     properties.callback = function() {
-      console.log("View callback");
       onFieldViewClosed(colIndex);
       if (typeof callbackParam == "function")
         callbackParam();

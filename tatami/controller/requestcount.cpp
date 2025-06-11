@@ -45,11 +45,11 @@ void RequestCountComponent::disconnectFrom(HttpService* service)
   disconnect(service, &HttpService::requestEnded,   this, &RequestCountComponent::onRequestEnded);
 }
 
-void RequestCountComponent::watchRequest(QNetworkReply* reply)
+void RequestCountComponent::watchRequest(HttpClient::ResponseObject* reply)
 {
   if (!reply->isFinished())
   {
-    connect(reply, &QNetworkReply::finished, this, &RequestCountComponent::onRequestEnded);
+    connect(reply, &HttpClient::ResponseObject::finished, this, &RequestCountComponent::onRequestEnded);
     onRequestStarted();
   }
 }
