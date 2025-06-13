@@ -16,22 +16,30 @@ QQControls.Dialog {
   modal: false
   closePolicy: QQControls.Popup.CloseOnEscape
 
-  onOpened: {
-    application.modal = this;
-    forceActiveFocus();
+  function attachActions() {
     if (parentView) {
       fallbackActionSet = parentView.viewActionsComponent;
       parentView.viewActionsComponent = actions;
     }
+  }
+
+  function detachActions() {
+    if (parentView) {
+      parentView.viewActionsComponent = fallbackActionSet;
+      fallbackActionSet = null;
+    }
+  }
+
+  onOpened: {
+    application.modal = this;
+    forceActiveFocus();
+    attachActions();
     standaloneActions.sourceComponent = actions;
   }
 
   onClosed: {
     application.modal = null;
-    if (parentView) {
-      parentView.viewActionsComponent = fallbackActionSet;
-      fallbackActionSet = null;
-    }
+    detachActions();
     standaloneActions.sourceComponent = null;
   }
 
