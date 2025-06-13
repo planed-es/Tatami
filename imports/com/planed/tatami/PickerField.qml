@@ -15,6 +15,13 @@ Button {
   background: Rectangle {
     color: parent.activeFocus ? "#3E65FF" : "#CCCCCC"
   }
+  contentItem: Label {
+    text: root.text
+    padding: 2
+    verticalAlignment: Text.AlignVCenter
+    horizontalAlignment: Text.AlignHCenter
+    font.capitalization: Font.AllUppercase
+  }
   Connections {
     target: root.model
     function onAttributeChanged() {

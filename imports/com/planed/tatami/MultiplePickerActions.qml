@@ -1,21 +1,16 @@
 import QtQuick 2.12
 
 ActionSet {
-  property QtObject model:        view.model
-  property string   propertyName: view.propertyName
-  property var      value:        view.value
-
   actions: [confirmAction, switchToOptionsAction, switchToSelectionAction, addAction, removeAction]
+
+  signal confirmed()
 
   Action {
     id: confirmAction
     text: i18n.t("actions.confirm")
     icon.name: "dialog-ok"
     sequence: "F5"
-    onTriggered: {
-      model[propertyName] = value;
-      application.closeCurrentView();
-    }
+    onTriggered: confirmed()
   }
 
   Action {

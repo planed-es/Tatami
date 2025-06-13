@@ -5,6 +5,7 @@ QQControls.Dialog {
   property var actions: dialogActions
   property var parentView
   property var fallbackActionSet
+  property var actionList: standaloneActions.item ? standaloneActions.item.actions : []
 
   id: root
   standardButtons: QQControls.Dialog.Ok

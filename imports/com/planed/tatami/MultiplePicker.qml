@@ -6,9 +6,7 @@ import "." as Tatami
 Tatami.View {
   id: root
   viewActionsComponent: defaultActions
-  property QtObject model
   property QtObject tableStyle: Tatami.TableStyle {}
-  property string   propertyName
   property alias    optionPicker: optionPicker
   property alias    controller: optionPicker.controller
   property QtObject selectionController
@@ -17,6 +15,7 @@ Tatami.View {
   property var      callback
   property var      columns
   property string   mainColumn
+  property bool     accepted: false
 
   Component.onCompleted: {
     root.controller.value = root.value;
@@ -52,19 +51,24 @@ Tatami.View {
     (optionPicker.hasFocus ? selectionTable : optionPicker).forceActiveFocus();
   }
 
-  Component.onDestruction: {
+  function save() {
     if (callback)
-      callback(model, propertyName, value);
-    model.attributeChanged();
+      callback(value);
+  }
+
+  Component.onDestruction: {
+    if (accepted)
+      save();
   }
 
   Component {
     id: defaultActions
     Tatami.MultiplePickerActions {
-      view:         root
-      model:        root.model
-      propertyName: root.propertyName
-      value:        root.value
+      view: root
+      onConfirmed: {
+        root.accepted = true;
+        application.closeCurrentView();
+      }
     }
   } // END ActionSet
 
