@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import Tatami 1.0
 
 TextField {
   property date date: new Date()
@@ -76,6 +77,8 @@ TextField {
     if (activeFocus)
       selectNextPart();
   }
+
+  validator: DateValidator {}
 
   Keys.onRightPressed: {
     fixInvalidDate();

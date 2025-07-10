@@ -3,6 +3,7 @@
 #include "tatami/controller.h"
 #include "tatami/edit_controller.h"
 #include "tatami/controller/multiplepicker.h"
+#include "tatami/datevalidator.h"
 #include <qqml.h>
 #include <QtGui/QFontDatabase>
 
@@ -18,6 +19,7 @@ void TatamiPlugin::registerFonts()
 void TatamiPlugin::registerTypes(const char *uri)
 {
   // @uri com.planed.tatami
+  qmlRegisterType<TatamiDateValidator>("Tatami", 1, 0, "DateValidator");
   qRegisterMetaType<MetaRecordable*>("const MetaRecordable*");
   qRegisterMetaType<MetaRecordable*>("MetaRecordable*");
   qRegisterMetaType<TatamiController*>("const TatamiController*");
