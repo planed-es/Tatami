@@ -7,19 +7,43 @@ Dialog {
   property string message
   property string icon: "security-medium"
 
-  height: dialogView.height + 150
+  height: Math.min(flickable.contentHeight, parent.height * 0.25)
 
-  RowLayout {
-    id: dialogView
-    anchors.horizontalCenter: parent.horizontalCenter
+  Flickable {
+    id: flickable
+    anchors.fill: parent
+    contentHeight: dialogView.height
+    clip: true
 
-    Image {
-      source: Icons.url(icon, 48)
+    RowLayout {
+      id: dialogView
+
+      Image {
+        Layout.alignment: (dialogView.height > 250 ? Qt.AlignTop : Qt.AlignVCenter) | Qt.AlignHCenter
+        source: Icons.url(icon, 48)
+      }
+
+      QQControls.Label {
+        id: label
+        text: message
+        Layout.fillWidth: true
+      }
     }
+  }
 
-    QQControls.Label {
-      Layout.fillWidth: true
-      text: message
+  Rectangle {
+    id: scrollbar
+    anchors.right: flickable.right
+    anchors.top: flickable.top
+    anchors.bottom: flickable.bottom
+    width: 10
+    color: "#CCCCCC"
+    visible: flickable.contentHeight > flickable.height
+    Rectangle {
+      anchors { left: parent.left; right: parent.right }
+      y: flickable.visibleArea.yPosition * flickable.height
+      height: flickable.visibleArea.heightRatio * flickable.height
+      color: "#3E65FF"
     }
   }
 }
