@@ -6,7 +6,7 @@
 class TATAMI_EXPORT TatamiMultiplePickerController : public TatamiEditController
 {
   Q_OBJECT
-  Q_PROPERTY(QStringList value MEMBER value NOTIFY valueChanged);
+  Q_PROPERTY(QStringList value MEMBER value NOTIFY valueChanged)
 public:
   explicit TatamiMultiplePickerController(QObject *parent = nullptr);
 
