@@ -4,10 +4,14 @@ import QtQuick.Layouts 1.12
 import com.planed.tatami 1.0 as Tatami
 
 View {
-  property var actions: loadActions()
+  property var actions
   id: root
   enabled: true
   isViewStackable: true
+
+  Component.onCompleted: {
+    root.actions = loadActions();
+  }
 
   function goToPage(pageName) {
     goToView(pageName + "/Index");
