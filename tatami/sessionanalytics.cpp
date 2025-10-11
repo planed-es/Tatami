@@ -72,6 +72,16 @@ TatamiSessionAnalytics* TatamiSessionAnalytics::singleton()
   return _singleton;
 }
 
+void TatamiSessionAnalytics::close()
+{
+  qDebug() << "TatamiSessionAnalytics::close";
+  for (const auto& entry : funnels)
+  {
+    if (entry.instance)
+      entry.instance->close();
+  }
+}
+
 void TatamiSessionAnalytics::registerFunnel(TatamiSessionFunnel* funnel)
 {
   if (funnel)
@@ -112,6 +122,7 @@ void TatamiSessionAnalytics::save()
   if (output.open(QIODevice::WriteOnly))
   {
     output.write(toJson().toUtf8());
+    qDebug() << "TatamiSessionAnalytics: saved" << storageFilepath;
   }
   else
     qDebug() << "TatamiSessionAnalytics: failed to create file" << storageFilepath;
@@ -144,6 +155,7 @@ TatamiSessionFunnel::TatamiSessionFunnel(QObject* parent) : QObject(parent)
 
 TatamiSessionFunnel::~TatamiSessionFunnel()
 {
+  qDebug() << "TatamiSessionFunnel detroyed" << type;
   if (!closed)
     close();
   emit beforeDestroy(this);

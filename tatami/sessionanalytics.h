@@ -8,6 +8,7 @@
 # include <QPointer>
 # include <QDir>
 # include <QtQml>
+# include "Tatami_global.h"
 
 class TATAMI_EXPORT TatamiSessionFunnel : public QObject
 {
@@ -72,6 +73,8 @@ public:
 
 public slots:
   void save();
+  void close();
+  void closeAndSave() { close(); save(); }
 
 private:
   QString storageFilepath;
