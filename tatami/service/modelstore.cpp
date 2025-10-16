@@ -37,6 +37,19 @@ void ModelStore::remove(ModelType* model)
   }
 }
 
+void ModelStore::removeIf(std::function<bool(const ModelType&)> callback)
+{
+  for (auto it = models.begin() ; it != models.end();)
+  {
+    const ModelType& model = **it;
+
+    if (callback(model))
+      it = models.erase(it);
+    else
+      it++;
+  }
+}
+
 void ModelStore::replaceModel(ModelType* model)
 {
   auto it = models.find(model->getUid());

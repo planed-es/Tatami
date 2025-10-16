@@ -20,6 +20,7 @@ public:
 
   void               insert(ModelType* model);
   void               remove(ModelType* model);
+  void               removeIf(std::function<bool(const ModelType&)>);
   unsigned int       count()  const { return static_cast<unsigned int>(models.size()); }
   QList<QByteArray>  uids()   const { return models.keys(); }
   ModelList          values() const { return models.values(); }
