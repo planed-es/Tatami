@@ -32,7 +32,7 @@ void ModelStore::remove(ModelType* model)
   {
     models.erase(it);
     emit modelRemoved(it.value());
-    disconnect(it.value(), &QObject::destroyed, this, &ModelStore::purgeModel);
+    disconnect(it.value(), &QObject::destroyed, this, nullptr);
     cleanUpModel(it.value());
   }
 }
@@ -43,13 +43,14 @@ void ModelStore::replaceModel(ModelType* model)
   if (it != models.end())
     cleanUpModel(it.value());
   models.insert(model->getUid(), model);
-  connect(model, &QObject::destroyed, this, &ModelStore::purgeModel);
+  connect(model, &QObject::destroyed, this, std::bind(&ModelStore::purgeModel, this, std::placeholders::_1, model->getUid()));
 }
 
-void ModelStore::purgeModel(QObject* object)
+void ModelStore::purgeModel(QObject* object, QByteArray uid)
 {
-  auto it = std::find_if(models.begin(), models.end(), [object](ModelType* ptr) { return object == ptr; });
-  if (it != models.end())
+  auto it = models.find(uid);
+
+  if (it != models.end() && it.value() == object)
   {
     models.erase(it);
     emit modelRemoved(reinterpret_cast<ModelType*>(object));

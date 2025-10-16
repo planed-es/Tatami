@@ -56,7 +56,7 @@ protected:
 
   Models models;
 private slots:
-  void purgeModel(QObject*);
+  void purgeModel(QObject*, QByteArray uid);
 };
 
 #endif // MODELSTORE_H
