@@ -18,6 +18,8 @@ Button {
   contentItem: Label {
     text: root.text
     padding: 2
+    clip: true
+    fontSizeMode: Text.HorizontalFit
     verticalAlignment: Text.AlignVCenter
     horizontalAlignment: Text.AlignHCenter
     font.capitalization: Font.AllUppercase
