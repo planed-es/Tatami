@@ -63,7 +63,7 @@ Item {
   }
 
   function defaultFieldFor(propertyName) {
-    if (customFields[propertyName])
+    if (customFields[propertyName] !== undefined)
       return customFields[propertyName];
     switch (typeof root.model[propertyName]) {
     case "boolean":
