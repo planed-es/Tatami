@@ -334,3 +334,26 @@ void setDefaultApplicationFont(QApplication& app)
   app.setFont(defaultFont);
 }
 ```
+
+### Adjusting text font size to fit a certain width
+
+Sometimes, it can be very painful to fit a text in an element of predefined width. Tatami comes with the `AdaptiveFontSize` component, which helps you find the best font width, within a given range, to fit within a given width. Here's how to use it:
+
+```qml
+import QtQuick
+import com.planed.tatami as Tatami
+
+TextField {
+  id: root
+  font.pixelSize: adaptiveFontSize.fontPixelSize
+
+  Tatami.AdaptiveFontSize {
+    id: adaptiveFontSize
+    text: root.text
+    fontName: root.font.family
+    width: root.width - root.leftPadding - root.rightPadding
+    maxSize: 20 // Use pixel sizes to define the range,
+    minSize: 8  // default minSize is 1
+  }
+}
+```
