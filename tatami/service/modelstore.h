@@ -26,9 +26,10 @@ public:
   ModelList          values() const { return models.values(); }
   void               reset();
 
-  ModelType*  get(const QByteArray& uid) const;
-  ModelType*  at(unsigned int index) const;
-  ModelType*  findOne(const QVariantMap&, int comparaisonType = MetaRecordComparable::Identical) const;
+  ModelType*         get(const QByteArray& uid) const;
+  ModelType*         at(unsigned int index) const;
+  ModelType*         findOne(const QVariantMap&, int comparaisonType = MetaRecordComparable::Identical) const;
+  ModelArray         find(QVariantMap params, int comparaisonType = MetaRecordComparable::Identical) const;
   ModelArray         getByUid(const QStringList& uids) const;
   ModelArray         getByUid(const QList<QByteArray>& uids) const;
   ModelArray         filter(const QVariantMap& params) const;

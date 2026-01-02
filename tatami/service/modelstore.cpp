@@ -133,6 +133,12 @@ ModelStore::ModelArray ModelStore::getByUid(const QStringList& uids) const
   return result;
 }
 
+ModelStore::ModelArray ModelStore::find(QVariantMap params, int comparaisonType) const
+{
+  params["_strategy"] = comparaisonType;
+  return filter(params);
+}
+
 ModelStore::ModelArray ModelStore::filter(const QVariantMap& params) const
 {
   return filter(std::bind(&filterWithVariantMap, params, std::placeholders::_1));
