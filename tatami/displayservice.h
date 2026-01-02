@@ -1,6 +1,7 @@
 #ifndef  DISPLAYSERVICE_H
 # define DISPLAYSERVICE_H
 
+# include <QPointer>
 # include "subsetservice.h"
 
 class TATAMI_EXPORT DisplayService : public SubsetService
@@ -38,8 +39,8 @@ private:
   void          onSourceChanged() override;
   bool          sortWithSample(const ModelType* a, const ModelType* b, SortCompare compare) const;
 
-  NewLinePolicy newLinePolicy = NewLineAtBottom;
-  EditState     state = ReadState;
-  ModelType*    sample = nullptr;
+  NewLinePolicy       newLinePolicy = NewLineAtBottom;
+  EditState           state = ReadState;
+  QPointer<ModelType> sample;
 };
 #endif // DISPLAYSERVICE_H

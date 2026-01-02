@@ -1,4 +1,5 @@
 #include "httpservice.h"
+#include <QPointer>
 #include <QUrlQuery>
 #include <QJsonDocument>
 #include <QJsonArray>
@@ -159,8 +160,9 @@ void HttpService::create(ModelType* model, std::function<void()> callback)
   });
 }
 
-void HttpService::update(ModelType* model, std::function<void()> callback)
+void HttpService::update(ModelType* model_, std::function<void()> callback)
 {
+  QPointer<ModelType> model(model_);
   auto* reply = http.post(pathFor(*model), QJsonDocument(model->toJson()));
 
   emit requestStarted();
@@ -173,15 +175,18 @@ void HttpService::update(ModelType* model, std::function<void()> callback)
     switch (status)
     {
       case 200:
-        ownedModel = get(model->getUid());
-        if (ownedModel)
-          ownedModel->copy(model);
-        else
+        if (model)
         {
-          model->setParent(this);
-          models.insert(model->getUid(), model);
+          ownedModel = get(model->getUid());
+          if (ownedModel)
+            ownedModel->copy(model);
+          else
+          {
+            model->setParent(this);
+            models.insert(model->getUid(), model);
+          }
+          emit modelSaved(model);
         }
-        emit modelSaved(model);
         if (callback) callback();
         break ;
       case 422:
@@ -194,12 +199,14 @@ void HttpService::update(ModelType* model, std::function<void()> callback)
   });
 }
 
-void HttpService::destroy(ModelType* model, std::function<void ()> callback)
+void HttpService::destroy(ModelType* model_, std::function<void ()> callback)
 {
+  QPointer<ModelType> model(model_);
+  QByteArray uid(model->getUid());
   auto* reply = http.destroy(pathFor(*model));
 
   emit requestStarted();
-  connect(reply, &HttpClient::ResponseObject::finished, this, [this, reply, model, callback]()
+  connect(reply, &HttpClient::ResponseObject::finished, this, [this, reply, model, uid, callback]()
   {
     unsigned int status = reply->attribute(HttpClient::Attribute::HttpStatusCodeAttribute).toUInt();
 
@@ -207,10 +214,13 @@ void HttpService::destroy(ModelType* model, std::function<void ()> callback)
     switch (status)
     {
       case 200:
-        models.remove(model->getUid());
-        emit modelRemoved(model);
-        model->setUid(QByteArray());
-        emit model->attributeChanged();
+        models.remove(uid);
+        if (model)
+        {
+          emit modelRemoved(model);
+          model->setUid(QByteArray());
+          emit model->attributeChanged();
+        }
         if (callback)
           callback();
         break ;
