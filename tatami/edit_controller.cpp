@@ -48,6 +48,8 @@ TatamiController::ModelType* TatamiEditController::startCreation()
 
 TatamiController::ModelType* TatamiEditController::startEdition(const ModelType* editedModel)
 {
+  if (betweenStates)
+    return nullptr;
   if (editedModel && displayService().values().indexOf(const_cast<ModelType*>(editedModel)) >= 0)
   {
     sample = displayService().startEdition(*editedModel);
@@ -64,8 +66,12 @@ void TatamiEditController::endEdition(bool save, QJSValue jsCallback)
 {
   auto callback = std::bind(&TatamiEditController::callbackWithIndexUpdate, this, currentIndex(), jsCallback);
 
+  if (betweenStates)
+    return ;
+  betweenStates = true;
   displayService().endEdition(save, [this, callback]()
   {
+    betweenStates = false;
     if (sample)
       disconnect(sample, &MetaRecordNotifiable::attributeChanged, this, &TatamiEditController::sampleAttributesChanged);
     sample = nullptr;

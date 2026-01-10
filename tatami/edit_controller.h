@@ -40,6 +40,7 @@ protected:
   void callbackWithIndexUpdate(int lastIndex, QJSValue callback);
 
   ModelType* sample = nullptr;
+  bool betweenStates = false;
 };
 
 #endif // SAMPLECONTROLLERCOMPONENT_H
