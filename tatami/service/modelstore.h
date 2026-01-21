@@ -39,6 +39,9 @@ public:
   template<typename MODEL>
   MODEL* getAs(const QByteArray& uid) const { return reinterpret_cast<MODEL*>(get(uid)); }
 
+  template<typename MODEL>
+  QVector<MODEL*> valuesAs() const { return model_vector_cast<MODEL>(values()); }
+
   template<typename ARRAY_TYPE>
   void loadFromArray(const ARRAY_TYPE& array)
   {
