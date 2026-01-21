@@ -4,21 +4,24 @@ import QtQuick.Controls 2.12 as QQControls
 QQControls.ToolButton {
   id: control
   property string label: {
-    var src = action.text;
+    if (action) {
+      let src = action.text;
 
-    src  = action.text.charAt(0).toUpperCase();
-    src += action.text.slice(1);
-    return src;
+      src  = action.text.charAt(0).toUpperCase();
+      src += action.text.slice(1);
+      return src;
+    }
+    return "";
   }
   //icon.color: null
   font.pixelSize: 18
   icon.width: 32
   icon.height: 32
 
-  text: label + (action.shortcut ? "\n" : "")
+  text: label + (action?.shortcut ? "\n" : "")
 
   Text {
-    text: action.shortcut ? `<i>${action.shortcut.nativeText}</i>` : ""
+    text: action?.shortcut ? `<i>${action.shortcut.nativeText}</i>` : ""
     anchors.bottom: parent.bottom
     anchors.bottomMargin: 3
     anchors.left: parent.left
