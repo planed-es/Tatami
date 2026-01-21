@@ -77,6 +77,12 @@ void ModelStore::reset()
   models.clear();
 }
 
+void ModelStore::clear()
+{
+  reset();
+  emit modelsChanged();
+}
+
 ModelStore::ModelType* ModelStore::get(const QByteArray& uid) const
 {
   auto it = models.find(uid);

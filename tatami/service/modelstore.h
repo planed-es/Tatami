@@ -5,6 +5,7 @@
 # include <QMap>
 # include <QByteArray>
 # include <metarecord-qt/metarecordnotifiable.h>
+# include <metarecord-qt/vector.h>
 # include "../Tatami_global.h"
 
 class TATAMI_EXPORT ModelStore : public QObject
@@ -24,7 +25,7 @@ public:
   unsigned int       count()  const { return static_cast<unsigned int>(models.size()); }
   QList<QByteArray>  uids()   const { return models.keys(); }
   ModelList          values() const { return models.values(); }
-  void               reset();
+  void               clear(); // resets AND emits modelsChanged
 
   ModelType*         get(const QByteArray& uid) const;
   ModelType*         at(unsigned int index) const;
@@ -53,6 +54,7 @@ signals:
   void modelRemoved(ModelType*);
 
 protected:
+  void        reset(); // clears all stored model, but does NOT emit modelsChanged
   void        replaceModel(ModelType* model);
   inline void cleanUpModel(ModelType* model) const { if (model->parent() == this) model->deleteLater(); }
 
