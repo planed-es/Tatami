@@ -24,10 +24,12 @@ HttpService::HttpService(QObject* parent) : JsonModelStore(parent)
 void HttpService::withPath(const QUrl& url, std::function<void()> callback)
 {
   QByteArray backup = path;
+  QUrlQuery queryBackup = urlQuery;
 
   setPath(url);
   callback();
   path = backup;
+  queryBackup = urlQuery;
 }
 
 QByteArray HttpService::pathFor(const ModelType& model) const
@@ -37,9 +39,17 @@ QByteArray HttpService::pathFor(const ModelType& model) const
   return path;
 }
 
+QUrl HttpService::getUrl(const QByteArray& path) const
+{
+  QUrl url(path);
+
+  url.setQuery(urlQuery);
+  return url;
+}
+
 void HttpService::fetch(Callback userCallback)
 {
-  auto* reply    = http.get(path);
+  auto* reply    = http.get(getUrl().toString().toUtf8());
   auto  callback = std::bind(&HttpService::receivedFetchReply, this, reply, userCallback, true);
 
   std::cout << "HttpService::Fetch: fetching " << path.toStdString() << std::endl;
@@ -57,16 +67,17 @@ void HttpService::fetch(const QUrlQuery& params, Callback callback)
 
 void HttpService::fetch(const QJsonDocument& document, Callback userCallback)
 {
-  auto* reply    = http.post(path, document);
+  auto* reply    = http.post(getUrl().toString().toUtf8(), document);
   auto  callback = std::bind(&HttpService::receivedFetchReply, this, reply, userCallback, true);
 
+  std::cout << "HttpService::Fetch: fetching " << path.toStdString() << std::endl;
   emit requestStarted();
   connect(reply, &HttpClient::ResponseObject::finished, this, callback);
 }
 
 void HttpService::fetchOne(const QByteArray& uid, std::function<void (ModelType*)> then)
 {
-  auto* reply = http.get(path + '/' + uid);
+  auto* reply = http.get(getUrl(path + '/' + uid).toString().toUtf8());
   auto  callback = [this, reply, then, uid]()
   {
     receivedFetchReply(reply, Callback(), false);
@@ -88,7 +99,8 @@ void HttpService::fetchUids(const QStringList& list, Callback userCallback)
 
 void HttpService::fetchUids(const QVector<QByteArray>& uids, Callback userCallback)
 {
-  auto* reply    = http.post(path + "/withUids", QJsonDocument(toJsonArray(uids)));
+  qDebug() << "fetchUids called:" << qPrintable(QJsonDocument(toJsonArray(uids)).toJson());
+  auto* reply    = http.post(getUrl(path + "/withUids").toString().toUtf8(), QJsonDocument(toJsonArray(uids)));
   auto  callback = std::bind(&HttpService::receivedFetchReply, this, reply, userCallback, true);
 
   emit requestStarted();
@@ -105,7 +117,7 @@ void HttpService::receivedFetchReply(HttpClient::ResponseObject* reply, Callback
     QByteArray a = reply->readAll();
 
     if (debugMode)
-      qDebug() << "Tatami::HttpService::receivedFetchReply: " << path << " -> " << a;
+      qDebug() << "Tatami::HttpService::receivedFetchReply: " << getUrl(path) << " -> " << qPrintable(a);
     if (withReset)
       reset();
     loadFromJson(QJsonDocument::fromJson(a));
@@ -258,7 +270,7 @@ void HttpService::receivedCreateErrorReply(HttpClient::ResponseObject* reply)
 {
   QJsonObject response = QJsonDocument::fromJson(reply->readAll()).object();
 
-  qDebug() << "/!\\" << ("Tatami:HttpService:" + path) << "received create error reply" << response;
+  qDebug() << "/!\\" << ("Tatami:HttpService:" + getUrl(path).toString()) << "received create error reply" << response;
   if (response["errors"].isObject())
     emit postFailure(response["errors"].toObject());
   else
@@ -269,7 +281,7 @@ void HttpService::receivedErrorReply(HttpClient::ResponseObject* reply)
 {
   unsigned int status = reply->attribute(HttpClient::Attribute::HttpStatusCodeAttribute).toUInt();
 
-  qDebug() << "/!\\" << ("Tatami:Service:" + path) << "server responded with status" << status;
+  qDebug() << "/!\\" << ("Tatami:Service:" + getUrl(path).toString()) << "server responded with status" << status;
   if (status >= 400)
     emit fetchFailure(QI18n::get()->t("messages.serverRejectedQuery"));
   else if (status >= 500)

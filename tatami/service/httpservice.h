@@ -13,10 +13,13 @@ public:
 
   explicit HttpService(QObject* parent = nullptr);
 
-  void setPath(const QUrl& url) { path = url.toString().toUtf8(); emit pathChanged(); }
+  void setPath(const QUrl& url) { path = url.path().toUtf8(); urlQuery = QUrlQuery(url.query()); emit pathChanged(); }
   void setPath(const QByteArray& value) { path = value; emit pathChanged(); }
   void withPath(const QUrl& url, std::function<void()>);
   void withPath(const QByteArray& value,  std::function<void()> callback) { withPath(QUrl(value), callback); }
+
+  QUrl getUrl() const { return getUrl(path); }
+  QUrl getUrl(const QByteArray& path) const;
   const QByteArray& getPath() const { return path; }
   virtual QByteArray pathFor(const ModelType&) const;
 
@@ -51,6 +54,7 @@ protected:
   HttpClient  http;
 private:
   QByteArray  path;
+  QUrlQuery   urlQuery;
 
 };
 
