@@ -8,11 +8,18 @@ ColumnLayout {
   property int minWidth: 100
   property bool hasFocus: fieldLoader.item.activeFocus
 
+  SystemPalette {
+    id: colors
+    colorGroup: parent.enabled ? SystemPalette.Active : SystemPalette.Disabled
+  }
+
   Text {
     Layout.fillWidth: true
     horizontalAlignment: Qt.AlignHCenter
     text: label
+    color: parent.enabled ? colors.text : "gray"
     font.capitalization: Font.Capitalize
+    font.underline: fieldLoader.item.activeFocus
   }
 
   Loader {
