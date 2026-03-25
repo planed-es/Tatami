@@ -2,11 +2,13 @@
 #include "service/filter.h"
 #define SOURCE_SIGNALS(command) \
   command(source, &ModelStore::modelsChanged, this, &SubsetService::onSourceChanged); \
-  command(source, &ModelStore::modelAdded,    this, &SubsetService::onModelAdded); \
-  command(source, &ModelStore::modelRemoved,  this, &SubsetService::onModelRemoved); \
-  command(source, &ModelStore::modelSaved,    this, &SubsetService::onModelSaved); \
-  command(source, &HttpService::fetchFailure, this, &SubsetService::fetchFailure); \
-  command(source, &HttpService::postFailure,  this, &SubsetService::postFailure);
+  command(source, &ModelStore::modelAdded,    this, &SubsetService::onModelAdded);    \
+  command(source, &ModelStore::modelRemoved,  this, &SubsetService::onModelRemoved);  \
+  command(source, &ModelStore::modelSaved,    this, &SubsetService::onModelSaved);    \
+  if (auto* http = qobject_cast<HttpService*>(source)) {                              \
+    command(source, &HttpService::fetchFailure, this, &SubsetService::fetchFailure);  \
+    command(source, &HttpService::postFailure,  this, &SubsetService::postFailure);   \
+  }
 
 SubsetService::SubsetService(TatamiServiceInterface* _source, std::function<bool(const ModelType*)> selector) :
   TatamiServiceInterface(_source), source(_source), selector(selector)
