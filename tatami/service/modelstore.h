@@ -25,6 +25,7 @@ public:
   unsigned int       count()  const { return static_cast<unsigned int>(models.size()); }
   QList<QByteArray>  uids()   const { return models.keys(); }
   ModelList          values() const { return models.values(); }
+  bool               contains(const ModelType* model) const { return model && models.contains(model->getUid()); }
   void               clear(); // resets AND emits modelsChanged
 
   ModelType*         get(const QByteArray& uid) const;
