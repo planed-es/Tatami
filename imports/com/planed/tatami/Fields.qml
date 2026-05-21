@@ -21,11 +21,10 @@ Item {
   }
 
   function appendField(field, colIndex) {
-    const tmp = fields;
-    while (colIndex >= tmp.length)
-      tmp.push(null);
-    tmp[colIndex] = field;
-    fields = tmp;
+    while (colIndex >= root.fields.length)
+      root.fields.push(null);
+    root.fields[colIndex] = field;
+    root.fieldsChanged();
   }
 
   function takeFocus() {
